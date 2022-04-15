@@ -24,9 +24,9 @@ function App() {
             <Route path="/" exact component={Login}></Route>
             <Route path="/signup" exact component={Signup}></Route>
             <Route path="/main" exact component={Main}></Route>
-            <Route path="/postdetail" exact component={PostDetail}></Route>
+            <Route path="/postDetail" exact component={PostDetail}></Route>
             <Route path="/profile" exact component={Profile}></Route>
-            <Route path="/profileedit" exact component={ProfileEdit}></Route>
+            <Route path="/profileEdit" exact component={ProfileEdit}></Route>
           </Switch>
         </ConnectedRouter>
       </Grid>
