@@ -113,6 +113,9 @@ function Login() {
                   fontWeight: "bold",
                   fontSize: "15px",
                 }}
+                onClick={() => {
+                  history.push("/signup");
+                }}
               >
                 가입하기
               </button>
