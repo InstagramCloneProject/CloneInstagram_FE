@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Grid, Image, Input } from "../elements";
 import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
+import { history } from "../redux/configureStore";
 
 // import image
 import LoginImg from "../assets/login_img.png";
@@ -49,7 +50,14 @@ function Login() {
               <StInput placeholder="전화번호, 사용자 이름 또는 이메일"></StInput>
               <StInput placeholder="비밀번호"></StInput>
             </StDiv>
-            <StButton style={{ cursor: "pointer" }}>로그인</StButton>
+            <StButton
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                history.push("/main");
+              }}
+            >
+              로그인
+            </StButton>
             <StDiv>
               <StSpan>또는</StSpan>
               <StLine></StLine>
