@@ -1,9 +1,93 @@
-import React from 'react'
+// eslint-disable-next-line
+import React from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+// import elements
+import { Button, Grid, Input, Image, Text } from "../elements";
+import { history } from "../redux/configureStore";
+
+// import MUI
+import { Avatar } from "@mui/material";
+
+// import react-icons
+import { BsGrid3X3 } from "react-icons/bs";
 
 function Profile() {
+  const dispatch = useDispatch();
+
   return (
-    <div>Profile</div>
-  )
+    <Grid width="100%" height="100vh">
+      헤더 헤더 헤더 헤더 헤더 헤더 헤더
+      {/* <Header /> */}
+      <Grid width="940px" margin="auto" _style={{ flexDirection: "column" }}>
+        <Grid width="100%" is_flex>
+          <Avatar
+            alt="Remy Sharp"
+            // src={pageuser ? pageUser.userProfileUrl : ""}
+            src="https://cdn.pixabay.com/photo/2017/08/06/12/06/people-2591874_960_720.jpg"
+            sx={{ marginRight: "50px", width: 150, height: 150 }}
+          />
+          <Grid padding="0 0 0 40px">
+            <Grid
+              width="100%"
+              is_flex
+              _style={{ justifyContent: "flex-start" }}
+            >
+              <Text color="#000" size="20px">
+                {/* {pageUser ? pageUser.loginId : ""} */}
+                유저아이디
+              </Text>
+              <button
+                onClick={{}}
+                style={{
+                  width: "100px",
+                  backgroundColor: "#fff",
+                  border: "1px solid #bbb",
+                  borderRadius: "4px",
+                  fontWeight: "bold",
+                  height: "30px",
+                  marginLeft: "20px",
+                }}
+              >
+                프로필 편집
+              </button>
+              {/* <input ref={{}} onChange={{}} type="file"></input> */}
+            </Grid>
+            <Grid
+              width="100%"
+              is_flex
+              _style={{ justifyContent: "flex-start" }}
+            >
+              <Text color="#000" margin="20px 40px 20px 0">
+                게시물
+              </Text>
+              <Text color="#000" margin="20px 40px 20px 0">
+                팔로워
+              </Text>
+              <Text color="#000" margin="20px 40px 20px 0">
+                팔로우
+              </Text>
+            </Grid>
+            <Grid
+              width="100%"
+              is_flex
+              _style={{ justifyContent: "flex-start" }}
+            >
+              <Text color="#000">유저닉네임</Text>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid _style={{ borderTop: "1px solid #bbb", marginTop: "50px" }}>
+          <Text color="#000">
+            <BsGrid3X3 size="10px" style={{ marginRight: "5px" }} />
+            게시물
+          </Text>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 }
 
-export default Profile
+export default Profile;

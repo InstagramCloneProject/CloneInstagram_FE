@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-function MyModal() {
+function MyModal(props) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const ModalStyle = {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
     content: {
       top: "50%",
       left: "50%",
@@ -18,6 +12,8 @@ function MyModal() {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
+      width: "750px",
+      height: "750px",
     },
   };
 

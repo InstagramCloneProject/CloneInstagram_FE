@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function PostDetail() {
-  return (
-    <div>PostDetail</div>
-  )
+  return <React.Fragment></React.Fragment>;
 }
 
-export default PostDetail
+export default PostDetail;

@@ -14,12 +14,16 @@ const Button = (props) => {
     border,
     borderRadius,
     cursor,
+    //추가
+    _style,
   } = props;
 
   if (is_float) {
     return (
       <React.Fragment>
-        <FloatButton onClick={_onClick}>{text ? text : children}</FloatButton>
+        <FloatButton style={_style} onClick={_onClick}>
+          {text ? text : children}
+        </FloatButton>
       </React.Fragment>
     );
   }
@@ -36,7 +40,7 @@ const Button = (props) => {
 
   return (
     <React.Fragment>
-      <ElButton {...styles} onClick={_onClick}>
+      <ElButton {...styles} style={_style} onClick={_onClick}>
         {text ? text : children}
       </ElButton>
     </React.Fragment>
