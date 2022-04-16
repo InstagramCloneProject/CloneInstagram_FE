@@ -10,11 +10,13 @@ import Logo from "../assets/logo.png";
 import download1 from "../assets/download1.png";
 import download2 from "../assets/download2.png";
 import { Link } from "react-router-dom";
+import ImageUpload from "../components/ImageUpload";
 
 function Login() {
   return (
     <React.Fragment>
-      <Grid
+      <ImageUpload></ImageUpload>
+      {/* <Grid
         width="100%"
         height="100vh"
         _style={{
@@ -195,7 +197,7 @@ function Login() {
           </select>
           <StFooter>&copy;2022 Instagram from Meta</StFooter>
         </Grid>
-      </Grid>
+      </Grid> */}
     </React.Fragment>
   );
 }
