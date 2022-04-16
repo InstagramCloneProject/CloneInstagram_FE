@@ -15,8 +15,7 @@ import ImageUpload from "../components/ImageUpload";
 function Login() {
   return (
     <React.Fragment>
-      <ImageUpload></ImageUpload>
-      {/* <Grid
+      <Grid
         width="100%"
         height="100vh"
         _style={{
@@ -197,7 +196,7 @@ function Login() {
           </select>
           <StFooter>&copy;2022 Instagram from Meta</StFooter>
         </Grid>
-      </Grid> */}
+      </Grid>
     </React.Fragment>
   );
 }
