@@ -14,6 +14,8 @@ const Text = (props) => {
     deco,
     textAlign,
     textShadow,
+    // 추가
+    _style,
   } = props;
 
   const styles = {
@@ -28,7 +30,7 @@ const Text = (props) => {
     textShadow: textShadow,
   };
   return (
-    <P onClick={_onClick} {...styles}>
+    <P style={_style} onClick={_onClick} {...styles}>
       {children}
     </P>
   );

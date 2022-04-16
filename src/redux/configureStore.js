@@ -7,6 +7,7 @@ import user from "./modules/user";
 import post from "./modules/post";
 import comment from "./modules/comment";
 import image from "./modules/image";
+import feed from "./modules/feed";
 
 export const history = createBrowserHistory();
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   post: post,
   comment: comment,
   image: image,
+  feed: feed,
   router: connectRouter(history),
 });
 
@@ -29,8 +31,7 @@ if (env === "development") {
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      })
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));

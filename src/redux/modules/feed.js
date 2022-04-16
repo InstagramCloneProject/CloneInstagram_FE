@@ -21,8 +21,7 @@ const getFeed = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const { data } = await api.get("/api/feed");
-      console.log(data);
+      const { data } = await api.get("/feed");
       dispatch(set(data));
     } catch {
       alert("데이터를 불러오지 못했습니다.");
@@ -31,14 +30,15 @@ const getFeed = () => {
 };
 
 // reducer
-export default handleActions({
-  [SET_FEED]: (state, action) =>
-    produce(state, (draft) => {
-      console.log("SET_FEED state", state);
-      console.log("SET_FEED action", action);
-      // draft.list = action.payload
-    }),
-});
+export default handleActions(
+  {
+    [SET_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        draft.list = action.payload.payload;
+      }),
+  },
+  initialState
+);
 
 const actionCreators = {
   getFeed,

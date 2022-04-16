@@ -38,10 +38,20 @@ function Signup() {
             height="530px"
             padding="40px"
             margin="30px 30px 15px 30px"
-            _style={{ border: "1px solid #bbb", backgroundColor: "#fff" }}
+            _style={{
+              border: "1px solid #bbb",
+              backgroundColor: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
           >
-            <img style={{ width: "180px" }} src={Logo} alt="Logo" />
-            <p style={{ fontWeight: "bold", color: "#666" }}>
+            <img
+              style={{ width: "180px", margin: "auto" }}
+              src={Logo}
+              alt="Logo"
+            />
+            <p style={{ fontWeight: "bold", color: "#666", margin: "auto" }}>
               친구들의 사진과 동영상을 보려면
               <br />
               가입하세요.
@@ -60,10 +70,7 @@ function Signup() {
                   cursor: "pointer",
                 }}
               >
-                <AiFillFacebook
-                  size="20px"
-                  style={{ transform: "translateY(4px)" }}
-                />
+                <AiFillFacebook size="20px" />
                 Facebook으로 로그인
               </button>
             </StDiv>
@@ -106,7 +113,7 @@ function Signup() {
               </button>
             </span>
           </Grid>
-          <Grid margin="20px 0">
+          <Grid is_flex margin="20px" _style={{ justifyContent: "center" }}>
             <a
               href="https://apps.apple.com/app/instagram/id389801252?vt=lo"
               target="_blank"
@@ -139,6 +146,7 @@ function Signup() {
             fontSize: "14px",
             position: "fixed",
             bottom: "0",
+            textAlign: "center",
           }}
         >
           <StFooter>Meta</StFooter>
@@ -216,6 +224,7 @@ const StSpan = styled.span`
   color: rgba(0, 0, 0, 0.6);
   width: 50px;
   background-color: #fff;
+  text-align: center;
 `;
 
 const StFooter = styled.span`
