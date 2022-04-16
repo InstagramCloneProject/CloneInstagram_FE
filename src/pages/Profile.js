@@ -40,7 +40,6 @@ function Profile() {
                 유저아이디
               </Text>
               <button
-                onClick={{}}
                 style={{
                   width: "100px",
                   backgroundColor: "#fff",

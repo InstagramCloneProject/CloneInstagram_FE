@@ -27,6 +27,7 @@ const Grid = (props) => {
     Control,
     overflow,
     Reaction,
+    position,
   } = props;
 
   const styles = {
@@ -52,6 +53,7 @@ const Grid = (props) => {
     float,
     overflow,
     Control,
+    position,
   };
   return (
     <React.Fragment>
@@ -70,7 +72,7 @@ Grid.defaultProps = {
   margin: false,
   bg: false,
   center: false,
-  borderLine: false,
+  borderLine: "red", //레이아웃 위해서 false에서 일시적으로 바꿔놓음
   borderRadius: false,
   boxShadow: false,
   display: "block",
@@ -83,6 +85,7 @@ Grid.defaultProps = {
   borderBottom: false,
   overflow: "",
   Control: false,
+  position: "",
 };
 
 const GridBox = styled.div`
@@ -96,13 +99,12 @@ const GridBox = styled.div`
     props.is_flex
       ? `display : flex; align-items: center; justify-content: space-between`
       : ""}
-      ${(props) => (props.center ? `text-align: center` : "")}
-      ${(props) =>
-    props.borderLine ? `border-Line: ${props.borderLine};` : ""}
-      ${(props) =>
+  ${(props) => (props.center ? `text-align: center` : "")}
+  ${(props) => (props.borderLine ? `border: ${props.borderLine};` : "")}
+  ${(props) =>
     props.borderRadius ? `border-Radius: ${props.borderRadius};` : ""}
-    ${(props) => (props.boxShadow ? `box-shadow: ${props.boxShadow}` : "")}
-    ${(props) =>
+  ${(props) => (props.boxShadow ? `box-shadow: ${props.boxShadow}` : "")}
+  ${(props) =>
     props.center_align
       ? `display : flex; align-items: center; justify-content: space-between`
       : ""}
@@ -124,6 +126,7 @@ const GridBox = styled.div`
     props.Reaction
       ? "@media (max-width: 935px) { width: 100%;padding: 3%}"
       : ""}
+  ${(props) => (props.position ? `position: ${props.position}` : "")}
 `;
 
 export default Grid;

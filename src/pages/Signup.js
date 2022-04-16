@@ -89,7 +89,7 @@ function Signup() {
               height: "60px",
             }}
           >
-            <span>
+            <span style={{ marginLeft: "80px" }}>
               계정이 있으신가요?
               <button
                 style={{

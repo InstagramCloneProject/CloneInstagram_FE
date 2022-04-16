@@ -101,7 +101,7 @@ function Login() {
               height: "60px",
             }}
           >
-            <span>
+            <span style={{ marginLeft: "80px" }}>
               계정이 없으신가요?
               <button
                 style={{
