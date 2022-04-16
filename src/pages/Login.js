@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Grid } from "../elements";
+import Follower from "../components/Follower";
 
 function Login() {
   return (
-    <div>Login</div>
-  )
+    <Grid>
+      Login
+      <Follower />
+    </Grid>
+  );
 }
 
-export default Login
+export default Login;

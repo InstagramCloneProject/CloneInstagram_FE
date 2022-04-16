@@ -2,34 +2,39 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-  const { shape, src, size } = props;
-  const styles = { src: src, size: size };
+  const { shape, src, size, _onClick, cursor, border } = props; //onClick 추가
+  const styles = { src: src, size: size, cursor: cursor, border: border };
 
   if (shape === "circle") {
-    return <ImageCircle {...styles}></ImageCircle>;
+    return <ImageCircle onClick={_onClick} {...styles}></ImageCircle>; //onClick 일괄추가
   }
 
   if (shape === "rectangle") {
     return (
       <RectangleOuter>
-        <RectangleInner {...styles}></RectangleInner>
+        <RectangleInner onClick={_onClick} {...styles}></RectangleInner>
       </RectangleOuter>
     );
   }
 
   return (
     <React.Fragment>
-      <ImageDefault {...styles}></ImageDefault>
+      <ImageDefault onClick={_onClick} {...styles}></ImageDefault>
     </React.Fragment>
   );
 };
-
+//프로필이미지
 Image.defaultProps = {
   shape: "circle",
-  src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png",
+  src: "http://www.goingmary.co.kr/shop/data/images/icons/basic_user.png",
   size: 50,
+  //추가
+  _onClick: () => {},
+  cursor: "",
+  border: "",
 };
 
+//포스팅이미지
 const ImageDefault = styled.div`
   --size: ${(props) => props.size}px;
   width: var(--size);
@@ -37,6 +42,9 @@ const ImageDefault = styled.div`
 
   background-image: url("${(props) => props.src}");
   background-size: cover;
+  //추가
+  cursor: ${(props) => props.cursor};
+  border: ${(props) => props.border};
 `;
 
 const RectangleOuter = styled.div`
@@ -45,13 +53,16 @@ const RectangleOuter = styled.div`
 `;
 const RectangleInner = styled.div`
   position: relative;
-  padding-top: 75%;
+  padding-top: 64%; //75%에서 수정함
   overflow: hidden;
   background-image: url("${(props) => props.src}");
   /* background-size: cover; */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  //추가
+  cursor: ${(props) => props.cursor};
+  border: ${(props) => props.border};
 `;
 
 const ImageCircle = styled.div`
@@ -63,6 +74,9 @@ const ImageCircle = styled.div`
   background-image: url("${(props) => props.src}");
   background-size: cover;
   margin: 4px;
+  //추가
+  cursor: ${(props) => props.cursor};
+  border: ${(props) => props.border};
 `;
 
 export default Image;

@@ -37,7 +37,7 @@ const Text = (props) => {
 Text.defaultProps = {
   children: null,
   bold: false,
-  color: "#FEFEFE",
+  color: "#404140", //컬러수정
   size: "14px",
   margin: false,
   font: "inherit",
