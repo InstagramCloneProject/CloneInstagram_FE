@@ -14,7 +14,6 @@ const Grid = (props) => {
     borderRadius,
     boxShadow,
     display,
-    //추가
     _style,
     height,
     gap,
@@ -28,6 +27,12 @@ const Grid = (props) => {
     overflow,
     Reaction,
     position,
+    //추가
+    borderLeft,
+    borderTop,
+    items,
+    top,
+    left,
   } = props;
 
   const styles = {
@@ -41,7 +46,6 @@ const Grid = (props) => {
     borderRadius: borderRadius,
     boxShadow: boxShadow,
     display: display,
-    //추가
     gap: gap,
     justifyContent: justifyContent,
     height: height,
@@ -54,6 +58,12 @@ const Grid = (props) => {
     overflow,
     Control,
     position,
+    //추가
+    borderLeft,
+    borderTop,
+    items,
+    top,
+    left,
   };
   return (
     <React.Fragment>
@@ -72,12 +82,11 @@ Grid.defaultProps = {
   margin: false,
   bg: false,
   center: false,
-  borderLine: "red", //레이아웃 위해서 false에서 일시적으로 바꿔놓음
+  borderLine: false,
   borderRadius: false,
   boxShadow: false,
   display: "block",
   center_align: false,
-  //추가
   height: "100%",
   flexFlow: false,
   column: false,
@@ -86,6 +95,10 @@ Grid.defaultProps = {
   overflow: "",
   Control: false,
   position: "",
+  //추가
+  borderLeft: false,
+  borderTop: false,
+  items: false,
 };
 
 const GridBox = styled.div`
@@ -107,8 +120,7 @@ const GridBox = styled.div`
   ${(props) =>
     props.center_align
       ? `display : flex; align-items: center; justify-content: space-between`
-      : ""}
-      //추가 
+      : ""} 
     height: ${(props) => props.height};
   float: ${(props) => props.float};
   border-bottom: ${(props) => props.borderBottom};
@@ -127,6 +139,12 @@ const GridBox = styled.div`
       ? "@media (max-width: 935px) { width: 100%;padding: 3%}"
       : ""}
   ${(props) => (props.position ? `position: ${props.position}` : "")}
+  //추가
+  ${(props) => (props.borderTop ? `border-top: ${props.borderT};` : "")}
+  ${(props) => (props.borderLeft ? `border-left: ${props.borderL};` : "")}
+  ${(props) => (props.items ? `align-items: ${props.items};` : "")}
+  ${(props) => (props.top ? `top: ${props.top};` : "")}
+  ${(props) => (props.left ? `left: ${props.left};` : "")}
 `;
 
 export default Grid;

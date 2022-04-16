@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Button, Grid, Image, Text, Input } from "../elements/index";
 
 import { history } from "../redux/configureStore";
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
-import { FaRegSmile } from "react-icons/fa";
 
 const PostCard = (props) => {
-  const [is_like, setIsLike] = useState(false);
+  const [is_like, setIsLike] = React.useState(false);
   const changeLike = () => {
     setIsLike(!is_like);
   };
@@ -18,6 +17,9 @@ const PostCard = (props) => {
       borderRadius="3px"
       margin="20px 0 0 0"
       bg="#fff"
+      _onClick={() => {
+        history.push("/postDetail/0");
+      }}
     >
       {/* 상단 게시자 */}
       <UserBox width="100%">
