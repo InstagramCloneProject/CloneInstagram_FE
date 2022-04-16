@@ -25,6 +25,7 @@ const Input = (props) => {
     size,
     bg,
     border,
+    _style,
   } = props;
 
   //추가
@@ -85,6 +86,7 @@ const Input = (props) => {
                 onSubmit(e);
               }
             }}
+            style={_style}
           />
         ) : (
           //ElInput 프롭스 변경
@@ -95,6 +97,7 @@ const Input = (props) => {
             type={type}
             placeholder={placeholder}
             onChange={_onChange}
+            style={_style}
           />
         )}
       </Grid>

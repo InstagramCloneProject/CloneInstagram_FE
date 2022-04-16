@@ -39,14 +39,20 @@ function Login() {
             height="400px"
             padding="40px"
             margin="30px 30px 15px 30px"
-            _style={{ border: "1px solid #bbb", backgroundColor: "#fff" }}
+            _style={{
+              border: "1px solid #bbb",
+              backgroundColor: "#fff",
+            }}
           >
-            <img
-              style={{ width: "180px", marginBottom: "15px" }}
-              src={Logo}
-              alt="Logo"
-            />
             <StDiv>
+              <img
+                style={{
+                  width: "180px",
+                  marginBottom: "15px",
+                }}
+                src={Logo}
+                alt="Logo"
+              />
               <StInput placeholder="전화번호, 사용자 이름 또는 이메일"></StInput>
               <StInput placeholder="비밀번호"></StInput>
             </StDiv>
@@ -74,10 +80,7 @@ function Login() {
                   cursor: "pointer",
                 }}
               >
-                <AiFillFacebook
-                  size="20px"
-                  style={{ transform: "translateY(4px)" }}
-                />
+                <AiFillFacebook size="20px" />
                 Facebook으로 로그인
               </button>
               <button
@@ -122,7 +125,14 @@ function Login() {
             </span>
           </Grid>
           <Grid width="350px" height="110px" padding="20px">
-            <span>앱을 다운로드 하세요.</span>
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              앱을 다운로드 하세요.
+            </span>
             <Grid margin="20px 0">
               <a
                 href="https://apps.apple.com/app/instagram/id389801252?vt=lo"
@@ -157,6 +167,7 @@ function Login() {
             fontSize: "14px",
             position: "fixed",
             bottom: "0",
+            textAlign: "center",
           }}
         >
           <StFooter>Meta</StFooter>
@@ -234,6 +245,7 @@ const StSpan = styled.span`
   color: rgba(0, 0, 0, 0.6);
   width: 50px;
   background-color: #fff;
+  text-align: center;
 `;
 
 const StFooter = styled.span`

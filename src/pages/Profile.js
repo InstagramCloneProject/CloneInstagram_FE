@@ -13,14 +13,24 @@ import { Avatar } from "@mui/material";
 
 // import react-icons
 import { BsGrid3X3 } from "react-icons/bs";
+import { useEffect } from "react";
+import { actionCreators } from "../redux/modules/feed";
 
 function Profile() {
   const dispatch = useDispatch();
 
+  // state data
+  const _feed = useSelector((state) => state.feed);
+
+  const feed_list = _feed.list;
+  console.log(feed_list);
+
+  useEffect(() => {
+    dispatch(actionCreators.getFeed());
+  }, []);
+
   return (
-    <Grid width="100%" height="100vh">
-      헤더 헤더 헤더 헤더 헤더 헤더 헤더
-      {/* <Header /> */}
+    <Grid width="100%" padding="80px 0 0 0">
       <Grid width="940px" margin="auto" _style={{ flexDirection: "column" }}>
         <Grid width="100%" is_flex>
           <Avatar
@@ -79,10 +89,23 @@ function Profile() {
           </Grid>
         </Grid>
         <Grid _style={{ borderTop: "1px solid #bbb", marginTop: "50px" }}>
-          <Text color="#000">
+          <Text color="#000" margin="20px 0">
             <BsGrid3X3 size="10px" style={{ marginRight: "5px" }} />
             게시물
           </Text>
+          <Grid width="100%">
+            <div className="container">
+              <div className="row">
+                {feed_list.map((cur, idx) => {
+                  return (
+                    <div className="col-md-4" key={idx} onClick={() => {}}>
+                      <Image shape="rectangle" src={cur.feedImg} alt="" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
