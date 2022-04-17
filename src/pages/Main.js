@@ -14,11 +14,7 @@ const Main = (props) => {
       <Header />
       <Grid borderLine="1px solid black" padding="0 23%">
         {/* post */}
-        <PostBox
-          onClick={() => {
-            history.push("/postDetail/0");
-          }}
-        >
+        <PostBox>
           <PostCard />
         </PostBox>
         <AsideBox>

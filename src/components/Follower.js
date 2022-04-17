@@ -32,8 +32,14 @@ const Aside = (props) => {
             </Text>
           </Grid>
         </Grid>
-        <Grid flex justify="space-between" padding="5px 0">
-          <Text textAlign="left" color="#8e8e8e" size="19px" bold>
+        <Grid is_flex padding="5px">
+          <Text
+            textAlign="left"
+            color="#8e8e8e"
+            size="15px"
+            bold
+            margin="20px 0px 0px 0px"
+          >
             회원님을 위한 추천
           </Text>
         </Grid>
@@ -41,7 +47,7 @@ const Aside = (props) => {
         {/* 다른 유저 네임택 */}
         <Grid is_flex>
           <Grid is_flex width="auto">
-            <Image shape="circle" size="40" />
+            <Image shape="circle" size="35" />
             <Text margin="0px 10px" bold>
               sparta
             </Text>
@@ -53,6 +59,7 @@ const Aside = (props) => {
               bold
               color="#0095F6"
               cursor="pointer"
+              margin="5px 0px"
             >
               팔로우
             </Text>
@@ -61,7 +68,7 @@ const Aside = (props) => {
 
         {/* elements 스타일 공통 적용은 어떤식으로 하나? */}
         <Grid padding="50px 5px">
-          <Text textAlign="left" size="11px" color="#c7c7c7">
+          <Text textAlign="left" size="11px" color="#c7c7c7" margin="5px 0px">
             소개 · 도움말 · 홍보 센터 · API · 채용 정보 ·
           </Text>
           <Text textAlign="left" size="11px" color="#c7c7c7">

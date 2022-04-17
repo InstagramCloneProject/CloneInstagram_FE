@@ -35,11 +35,11 @@ function App() {
 
       <ConnectedRouter history={history}>
         <Switch>
-          {/* <Route path="/" exact component={Login}></Route> */}
+          <Route path="/" exact component={Login}></Route>
           <Route path="/signup" exact component={Signup}></Route>
           <Route path="/main" exact component={Main}></Route>
           <Route path="/postDetail" exact component={PostDetail}></Route>
-          <Route path="/" exact component={PostWrite}></Route>
+          <Route path="/postWrite" exact component={PostWrite}></Route>
           <Route path="/profile" exact component={Profile}></Route>
           <Route path="/profileEdit" exact component={ProfileEdit}></Route>
         </Switch>
