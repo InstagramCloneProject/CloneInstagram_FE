@@ -10,6 +10,7 @@ import Logo from "../assets/logo.png";
 import download1 from "../assets/download1.png";
 import download2 from "../assets/download2.png";
 import { Link } from "react-router-dom";
+import ImageUpload from "../components/ImageUpload";
 
 function Login() {
   return (
