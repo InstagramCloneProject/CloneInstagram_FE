@@ -38,6 +38,7 @@ const Aside = (props) => {
           </Text>
         </Grid>
 
+        {/* 다른 유저 네임택 */}
         <Grid is_flex>
           <Grid is_flex width="auto">
             <Image shape="circle" size="40" />
@@ -57,6 +58,7 @@ const Aside = (props) => {
             </Text>
           </Grid>
         </Grid>
+
         {/* elements 스타일 공통 적용은 어떤식으로 하나? */}
         <Grid padding="50px 5px">
           <Text textAlign="left" size="11px" color="#c7c7c7">
@@ -65,7 +67,7 @@ const Aside = (props) => {
           <Text textAlign="left" size="11px" color="#c7c7c7">
             개인정보처리방침 · 약관 · 위치 · 인기계정 ·해시태그 ·언어
           </Text>
-          <Text margin="50px" size="11px" color="#c7c7c7">
+          <Text textAlign="left" margin="50px 0px" size="11px" color="#c7c7c7">
             © 2021 INSTAGRAM FROM META
           </Text>
         </Grid>
