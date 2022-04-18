@@ -24,12 +24,15 @@ const PostCard = (props) => {
       {/* 상단 게시자 */}
       <UserBox width="100%">
         <Grid is_flex>
-          <Grid is_flex width="auto" padding="0px 8px">
+          <Grid is_flex width="auto" padding="8px 0px 0px 8px">
             <Image
               border="1px solid #bcbcbc"
               shape="circle"
               size="40"
               src="myprofile.png"
+              _onClick={() => {
+                history.push("/postDetail/0");
+              }}
             />
             <Text margin="0px 10px" bold>
               hanghae123
@@ -119,7 +122,7 @@ const PostCard = (props) => {
       </Grid>
 
       {/* 작성시간 */}
-      <Grid padding="5px 16px 16px 16px">
+      <Grid padding="5px 16px 16px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
           15시간 전
         </Text>
@@ -130,7 +133,7 @@ const PostCard = (props) => {
         <Grid is_flex>
           <img
             src="emoji.png"
-            style={{ cursor: "pointer", padding: "0px 16px 8px 0" }}
+            style={{ cursor: "pointer", margin: "7px 16px 8px 0" }}
             height={"30px"}
             alt="emoticon"
           />

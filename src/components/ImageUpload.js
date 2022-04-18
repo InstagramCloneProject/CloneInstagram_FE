@@ -26,8 +26,8 @@ const StImageBox = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
-  width: 500px;
-  height: 500px;
+  width: 30vw; //변경
+  height: 60vh; //변경
   background-color: #fff;
   border: 1px solid red;
 `;
