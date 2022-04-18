@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  //   baseURL: "변경필요",
+  baseURL: "http://localhost:3001/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -20,6 +20,7 @@ export const apis = {
   // edit: (id, contents) => api.put(`api/articles/${id}`, contents),
   delete: (Id) => api.delete(`/api/posts/${Id}`),
   getDetail: (Id) => api.get(`/api/details/${Id}`),
+  getFeed: () => api.get("/feed"),
 
   // comment
   addComment: (post_id, NewComment) =>
@@ -30,6 +31,14 @@ export const apis = {
     api.put(`/api/comment/${commentId}`, { comment }),
 
   // user
-  login: (id, pwd) => api.post("/user/login", { nickname: id, password: pwd }),
+  login: (userId, password) =>
+    api.post("/user/login", { userId: userId, password: password }),
+  join: (userId, nickName, password, confirmPassword) =>
+    api.post("/user/join", {
+      userId: userId,
+      nickName: nickName,
+      password: password,
+      confirmPassword: confirmPassword,
+    }),
   // userinfo: () => api.get(`/userinfo`),
 };

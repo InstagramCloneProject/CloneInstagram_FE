@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, Image, Input } from "../elements";
 import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
 import { history } from "../redux/configureStore";
+import { useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/user";
 
 // import image
 import LoginImg from "../assets/login_img.png";
@@ -13,6 +15,23 @@ import { Link } from "react-router-dom";
 import ImageUpload from "../components/ImageUpload";
 
 function Login() {
+  const dispatch = useDispatch();
+
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    if (userId === "") {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    if (password === "") {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    dispatch(userActions.loginMW(userId, password));
+  };
+
   return (
     <React.Fragment>
       <Grid
@@ -54,17 +73,25 @@ function Login() {
                 src={Logo}
                 alt="Logo"
               />
-              <StInput placeholder="전화번호, 사용자 이름 또는 이메일"></StInput>
-              <StInput placeholder="비밀번호"></StInput>
+              <StInput
+                placeholder="전화번호, 사용자 이름 또는 이메일"
+                onChange={(e) => {
+                  setUserId(e.target.value);
+                }}
+                value={userId}
+              ></StInput>
+              <StInput
+                placeholder="비밀번호"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                type="password"
+                value={password}
+              ></StInput>
+              <StButton type="submit" onClick={handleLogin}>
+                로그인
+              </StButton>
             </StDiv>
-            <StButton
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                history.push("/main");
-              }}
-            >
-              로그인
-            </StButton>
             <StDiv>
               <StSpan>또는</StSpan>
               <StLine></StLine>
@@ -229,6 +256,12 @@ const StButton = styled.button`
   border-radius: 3px;
   color: #fff;
   font-weight: bold;
+  transition: ease-in-out 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0095f6;
+  }
 `;
 
 const StLine = styled.div`

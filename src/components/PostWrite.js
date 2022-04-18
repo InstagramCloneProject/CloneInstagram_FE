@@ -112,7 +112,7 @@ function PostWrite() {
       </Grid>
     </Grid>
   );
-
+}
 export default PostWrite;
 
 const ModalBg = styled.div`
