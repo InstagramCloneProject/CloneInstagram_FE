@@ -112,7 +112,6 @@ function PostWrite() {
       </Grid>
     </Grid>
   );
-}
 
 export default PostWrite;
 
