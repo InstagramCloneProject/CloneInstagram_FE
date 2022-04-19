@@ -26,6 +26,8 @@ const Input = (props) => {
     bg,
     border,
     _style,
+    color,
+    placeholder_st,
   } = props;
 
   //추가
@@ -37,6 +39,8 @@ const Input = (props) => {
     padding,
     height,
     border,
+    color,
+    placeholder_st,
   };
 
   if (multiLine) {
@@ -121,6 +125,8 @@ Input.defaultProps = {
   width: "20%",
   size: "14px",
   border: "",
+  color: "",
+  placeholder_st: "",
 };
 
 const ElTextArea = styled.textarea`
@@ -143,20 +149,23 @@ const ElTextArea = styled.textarea`
     outline: none;
   }
   border: ${(props) => props.border};
+  color: ${(props) => props.color};
 `;
 
 const ElInput = styled.input`
   border: 1px solid #212121;
   border-radius: 8px;
   width: 100%;
-  padding: 8px 4px; //수정
+  padding: 8px 4px; //수정 8px-> 5px
   box-sizing: border-box;
-  margin-bottom: 5px; //수정
+  margin: 5px; //헤더부분 인풋창 세로크기 주리려고 주석해봄
   //추가
   background-color: ${(props) => props.bg};
   outline: none;
   -webkit-appearance: none;
   border: ${(props) => props.border};
+  font-size: ${(props) => props.size};
+  color: ${(props) => props.color};
 `;
 
 export default Input;

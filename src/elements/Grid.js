@@ -35,6 +35,7 @@ const Grid = (props) => {
     left,
     hover,
     cursor,
+    _onClick,
   } = props;
 
   const styles = {
@@ -71,7 +72,7 @@ const Grid = (props) => {
   };
   return (
     <React.Fragment>
-      <GridBox style={_style} {...styles}>
+      <GridBox onClick={_onClick} style={_style} {...styles}>
         {children}
       </GridBox>
     </React.Fragment>
@@ -100,11 +101,12 @@ Grid.defaultProps = {
   Control: false,
   position: "",
   //추가
-  borderLeft: false,
-  borderTop: false,
+  borderL: false,
+  borderT: false,
   items: false,
   hover: false,
   cursor: "",
+  _onClick: () => {},
 };
 
 const GridBox = styled.div`
@@ -146,8 +148,8 @@ const GridBox = styled.div`
       : ""}
   ${(props) => (props.position ? `position: ${props.position}` : "")}
   //추가
-  ${(props) => (props.borderTop ? `border-top: ${props.borderT};` : "")}
-  ${(props) => (props.borderLeft ? `border-left: ${props.borderL};` : "")}
+  ${(props) => (props.borderTop ? `border-top: ${props.borderTop};` : "")}
+  ${(props) => (props.borderLeft ? `border-left: ${props.borderLeft};` : "")}
   ${(props) => (props.items ? `align-items: ${props.items};` : "")}
   ${(props) => (props.top ? `top: ${props.top};` : "")} 
   ${(props) => (props.left ? `left: ${props.left};` : "")}
