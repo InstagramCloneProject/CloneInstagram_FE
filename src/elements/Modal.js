@@ -4,13 +4,30 @@ import { CgClose } from "react-icons/cg";
 
 import { history } from "../redux/configureStore";
 
-const Modal = ({
-  // className,
-  closeModal,
-  children,
-  width,
-  height,
-}) => {
+// { 프롭스 주석
+//   // className,
+//   closeModal,
+//   children,
+//   width,
+//   height,
+// }
+
+const Modal = (props) => {
+  const { closeModal, children } = props;
+  // 모달 오버레이에서 스크롤 방지
+  React.useEffect(() => {
+    document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = "";
+      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+    };
+  }, []);
+
   const oncloseModal = (e) => {
     console.log("e.target: ", e.target);
     console.log("e.currentTarget: ", e.currentTarget);

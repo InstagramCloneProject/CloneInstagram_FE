@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { Button, Grid, Image, Text } from "../elements/index";
 import { history } from "../redux/configureStore";
 
+import myProfileIcon from "../assets/icons/myprofile.png";
+
 const Aside = (props) => {
+  const userId = localStorage.getItem("userId");
   return (
     <Grid width="400px" bg="#fafafa" padding="0px 25px">
       <Grid width="100%">
@@ -13,11 +16,11 @@ const Aside = (props) => {
               border="1px solid #bcbcbc"
               shape="circle"
               size="60"
-              src="myprofile.png"
+              src={myProfileIcon} //프로필 url 받아오기
               cursor="poiner"
             />
             <Text margin="0px 10px" bold>
-              hanghae
+              {userId}
             </Text>
           </Grid>
           <Grid>

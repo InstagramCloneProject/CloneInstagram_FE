@@ -17,6 +17,7 @@ import Profile from "../pages/Profile";
 import ProfileEdit from "../pages/ProfileEdit";
 import Header from "../components/Header";
 import DelPop from "../components/DelPop";
+import PostUpdate from "../components/PostUpdate";
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
 
       <ConnectedRouter history={history}>
         <Switch>
-          <Route path="/" exact component={Login}></Route>
+          {/* <Route path="/" exact component={Login}></Route> */}
+          <Route path="/" exact component={DelPop}></Route>
           <Route path="/signup" exact component={Signup}></Route>
           <Route path="/main" exact component={Main}></Route>
           <Route

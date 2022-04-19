@@ -8,6 +8,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as feedActions } from "../redux/modules/feed";
 
+import myProfileIcon from "../assets/icons/myprofile.png";
+import moreIcon from "../assets/icons/more.png";
+import dmIcon from "../assets/icons/dm.png";
+import commentIcon from "../assets/icons/comment.png";
+import scrapIcon from "../assets/icons/scrap.png";
+import emojiIcon from "../assets/icons/emoji.png";
+
 import DelPop from "../components/DelPop";
 import Modal from "../elements/Modal";
 
@@ -87,7 +94,7 @@ function PostDetail() {
                       border="1px solid #bcbcbc"
                       shape="circle"
                       size="40"
-                      src="myprofile.png"
+                      src={myProfileIcon} //프로필 url 받아오기
                     />
                     <Text margin="10px" bold>
                       hanghae123
@@ -98,11 +105,11 @@ function PostDetail() {
                     </Text>
                   </Grid>
                   <Grid width="5%" margin="0px 20px" _onClick={openDel}>
-                    <Icon src="more.png" alt="see more" />
+                    <Icon src={moreIcon} alt="see more" />
                   </Grid>
                   {delOpen && (
-                    <Modal closeDel={closeDel}>
-                      <DelPop />
+                    <Modal closeModal={closeModal}>
+                      <DelPop closeDel={closeDel} />
                     </Modal>
                   )}
                 </Grid>
@@ -112,11 +119,10 @@ function PostDetail() {
                   column="column"
                   padding="10px 5px 0 4px"
                   width="100%"
-                  height="86%"
-                  bg="yellow"
+                  height="90%"
                 >
                   {/* 컨텐츠 부분 */}
-                  <Grid width="100%" height="60%" bg="red">
+                  <Grid width="100%" height="63%">
                     <Grid
                       display="flex"
                       justifyContent="left"
@@ -127,7 +133,7 @@ function PostDetail() {
                         border="1px solid #bcbcbc"
                         shape="circle"
                         size="40"
-                        src="myprofile.png"
+                        src={myProfileIcon} //프로필 url 받아오기
                       />
                       <Text bold textAlign="left" margin="13px">
                         hanghae123
@@ -137,12 +143,7 @@ function PostDetail() {
                       </Text>
                     </Grid>
                     <Grid height="100%" padding="0px 10px 0px 55px">
-                      <Grid
-                        column="column"
-                        width="100%"
-                        height="35%"
-                        bg="orange"
-                      >
+                      <Grid column="column" width="100%" height="35%">
                         <Text
                           margin="20px 0px"
                           color="#8e8e8e"
@@ -156,14 +157,13 @@ function PostDetail() {
                           width="100%"
                           height="65%"
                           padding="0px 10px 0px 0px"
-                          bg="green"
                         >
                           <Grid is_flex width="42%">
                             <Image
                               border="1px solid #bcbcbc"
                               shape="circle"
                               size="40"
-                              src="myprofile.png"
+                              src={myProfileIcon} // comment 렌더링할때 프로필 받아오기
                             />
                             <Text bold textAlign="left" margin="10px 0px">
                               sparta111
@@ -182,11 +182,10 @@ function PostDetail() {
                     width="100%"
                     height="40%"
                     position="fixed"
-                    bg="pink"
                     column="column"
                   >
                     {/* 댓글창 윗부분 */}
-                    <Grid is_flex height="80%" bg="black" column="column">
+                    <Grid is_flex height="80%" column="column">
                       {/* 이모티콘 줄 */}
                       <Grid is_flex width="100%" height="30%" padding="0px 8px">
                         <Grid is_flex width="38%">
@@ -214,16 +213,16 @@ function PostDetail() {
                             onClick={() => {
                               history.push("/postDetail");
                             }}
-                            src="comment.png"
+                            src={commentIcon}
                             alt="comment"
                           />
-                          <Icon src="dm.png" alt="direct message" />
+                          <Icon src={dmIcon} alt="direct message" />
                         </Grid>
                         <Grid width="8%" items="middle">
-                          <img src="scrap.png" alt="scrap" />
+                          <Icon src={scrapIcon} alt="scrap" />
                         </Grid>
                       </Grid>
-                      <Grid padding="0px 8px">
+                      <Grid padding="10px 8px">
                         <Text bold textAlign="left" margin="0">
                           좋아요 10개
                         </Text>
@@ -245,7 +244,7 @@ function PostDetail() {
                         padding="5px 0px 0px 8px"
                       >
                         <img
-                          src="emoji.png"
+                          src={emojiIcon}
                           style={{
                             cursor: "pointer",
                             padding: "5px 0px",
@@ -304,5 +303,4 @@ const CommentBox = styled.div`
   display: flex;
   flex: 1, 1, 0;
   border-top: 1px solid #efefef;
-  background-color: blue;
 `;
