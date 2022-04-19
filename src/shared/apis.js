@@ -53,20 +53,20 @@ api.interceptors.response.use(
 
 export const apis = {
   // post
-  add: (content) => api.post("/feed", content),
-  edit: (id, contents) => api.patch(`feed/${id}`, contents),
-  delete: (Id) => api.delete(`/feed/${Id}`),
-  getDetail: (Id) => api.get(`/feed/${Id}`),
+  add: (content) => api.post("/api/feed", content),
+  edit: (id, contents) => api.patch(`/api/feed/${id}`, contents),
+  delete: (Id) => api.delete(`/api/feed/${Id}`),
+  getDetail: (Id) => api.get(`/api/feed/${Id}`),
 
   // comment
   addComment: (post_id, NewComment) =>
-    api.post("/comment", { postId: post_id, comment: NewComment }),
-  delComment: (commentId) => api.delete(`/comment/${commentId}`),
+    api.post("/api/comment", { postId: post_id, comment: NewComment }),
+  delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
   editComment: (commentId, comment) =>
-    api.patch(`/comment/${commentId}`, { comment }),
+    api.patch(`/api/comment/${commentId}`, { comment }),
 
   // user
-  login: (payload) => api.post("/user/login", payload),
-  join: (payload) => api.post("/user/join", payload),
+  login: (payload) => api.post("/api/user/login", payload),
+  join: (payload) => api.post("/api/user/join", payload),
   // userinfo: () => api.get(`/userinfo`),
 };

@@ -4,11 +4,33 @@ import { Button, Grid, Image, Text, Input, Modal } from "../elements/index";
 
 import { history } from "../redux/configureStore";
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
+import DelPop from "./DelPop";
+
+import myProfileIcon from "../assets/icons/myprofile.png";
+import moreIcon from "../assets/icons/more.png";
+import dmIcon from "../assets/icons/dm.png";
+import commentIcon from "../assets/icons/comment.png";
+import scrapIcon from "../assets/icons/scrap.png";
+import emojiIcon from "../assets/icons/emoji.png";
 
 const PostCard = (props) => {
   const [is_like, setIsLike] = React.useState(false);
   const changeLike = () => {
     setIsLike(!is_like);
+  };
+
+  //모달 상태관리
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [delOpen, setDelOpen] = React.useState(false);
+
+  //열기
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  //닫기
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -27,14 +49,20 @@ const PostCard = (props) => {
               border="1px solid #bcbcbc"
               shape="circle"
               size="40"
-              src="myprofile.png"
+              src={myProfileIcon}
             />
             <Text margin="0px 10px" bold>
               {props.nickname}
             </Text>
           </Grid>
           <Grid width="10%" margin="0px 15px">
-            <Icon src="more.png" alt="see more" />
+            <Icon src={moreIcon} alt="see more" onClick={openModal} />
+            {modalOpen && (
+              <Modal closeModal={closeModal} feedId={props.feedId}>
+                <DelPop closeModal={closeModal} {...props} />
+                {/* 피드아이디 넘겨주기위해 delPop으로 props 넘기기 되는지 확인..! */}
+              </Modal>
+            )}
           </Grid>
         </Grid>
 
@@ -80,13 +108,13 @@ const PostCard = (props) => {
             onClick={() => {
               history.push(`/postDetail/${props.feedId}`);
             }}
-            src="comment.png"
+            src={commentIcon}
             alt="comment"
           />
-          <Icon src="dm.png" alt="direct message" />
+          <Icon src={dmIcon} alt="direct message" />
         </Grid>
         <Grid width="12%">
-          <Icon size="20" src="scrap.png" alt="scrap" />
+          <Icon size="20" src={scrapIcon} alt="scrap" />
         </Grid>
       </Grid>
 
@@ -126,11 +154,7 @@ const PostCard = (props) => {
           {/* 프롭스에서 넘겨받은 데이터 */}
           "댓글 15개 모두보기"
         </Text>
-        {/* {modalOpen && (
-          <Modal closeModal={closeModal}>
-            <PostDetail />
-          </Modal>
-        )} */}
+
         <Grid Control="left" display="flex">
           <Text bold>sparta</Text>
           <Text margin="0px 10px"> 스티치 귀여워요!🔥🔥🔥 </Text>
@@ -148,7 +172,7 @@ const PostCard = (props) => {
       <CommentBox>
         <Grid is_flex>
           <img
-            src="emoji.png"
+            src={emojiIcon}
             style={{ cursor: "pointer", margin: "7px 16px 8px 0" }}
             height={"30px"}
             alt="emoticon"
@@ -200,6 +224,7 @@ const Icon = styled.img`
   height: 24px;
   margin-left: 20px;
   cursor: pointer;
+  onClick
 `;
 
 const Ellipsis = styled.div`

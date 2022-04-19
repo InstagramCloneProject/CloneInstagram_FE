@@ -12,10 +12,10 @@ const GET_DETAIL = "GET_DETAIL";
 
 // action creator
 const setFeed = createAction(SET_FEED, (feed_list) => feed_list); //중괄호 여부 체크 필요!
-const getDetail = createAction(GET_DETAIL, (feedId) => ({ feedId }));
+const getDetail = createAction(GET_DETAIL, (detailFeed) => ({ detailFeed }));
 const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
+const delFeed = createAction(DEL_FEED, (feedId) => ({ feedId }));
 const editFeed = createAction(EDIT_FEED, (payload) => ({ payload }));
-const delFeed = createAction(DEL_FEED, (payload) => ({ payload }));
 
 // initialState
 const initialState = {
@@ -94,6 +94,77 @@ const addFeedDB = (file, content) => {
   };
 };
 
+//수정페이지에서 url 수정여부를 검사해서 보내줘야 할 듯.
+const editFeedDB = (data) => {
+  return async function (dispatch, getState, { history }) {
+    try {
+      console.log("수정통신", data);
+
+      const feedInfo = getState().feed.list;
+      console.log("피드정보", feedInfo);
+
+      const feedImg = feedInfo[0].feedImg;
+
+      if (data.img_url === feedImg) {
+        const formData = new FormData();
+        formData.append(
+          "information",
+          new Blob([JSON.stringify(data.contents)], {
+            type: "application/json",
+          })
+        );
+        await apis.patch(data.feedId, formData).then((res) => {
+          window.alert("피드 수정 완료!");
+          dispatch(editFeed(data.img_url, data.feedId, data.contents));
+        });
+        // .catch((err) => {
+        //   console.log(err);
+        //   window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
+        // });
+      } else if (data.img_url !== feedImg) {
+        const formData = new FormData();
+        formData.append("file", data.file);
+        formData.append(
+          "information",
+          new Blob([JSON.stringify(data.contents)], {
+            type: "application/json",
+          })
+        );
+        await apis.patch(data.feedId, formData).then((res) => {
+          window.alert("피드 수정 완료!");
+          dispatch(editFeed(data.img_url, data.feedId, data.contents));
+        });
+        // .catch((err) => {
+        //   console.log(err);
+        //   window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
+        // });
+      }
+    } catch (err) {
+      console.log(err);
+      window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
+    }
+  };
+};
+
+const delFeedDB = (feedId) => {
+  return async function (dispatch, getState, { history }) {
+    try {
+      const { data } = await apis.delete(feedId);
+      const _feed = getState().feed.list;
+      console.log(_feed);
+      const feed_index = _feed.findIndex((f) => {
+        return parseInt(f.feedId) === parseInt(feedId);
+      });
+      dispatch(delFeed(feedId));
+      history.goBack();
+    } catch (err) {
+      console.log(err);
+      window.alert("삭제실패! 다시 시도해주세요.");
+      history.goBack();
+    }
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -106,6 +177,17 @@ export default handleActions(
       produce(state, (draft) => {
         console.log("리듀서 피드 애드한다");
         draft.list.unshift(action.payload.feed);
+      }),
+    [DEL_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        console.log("리듀서 삭제한다.");
+        draft.list = state.list.filter(
+          (f) => f.feedId !== action.payload.feedId
+        );
+      }),
+    [EDIT_FEED]: (state, action) =>
+      produce(state, (draft) => {
+        console.log("리듀서 수정한다!");
       }),
   },
   initialState
