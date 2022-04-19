@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
 import { history } from "../redux/configureStore";
 import { useDispatch } from "react-redux";
-import { actionCreators as userActions } from "../redux/modules/user";
+import { actionCreators } from "../redux/modules/user";
 
 // import image
 import LoginImg from "../assets/login_img.png";
@@ -17,19 +17,17 @@ import ImageUpload from "../components/ImageUpload";
 function Login() {
   const dispatch = useDispatch();
 
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    userId: "",
+    password: "",
+  });
 
-  const handleLogin = () => {
-    if (userId === "") {
-      alert("아이디를 입력해주세요.");
-      return;
-    }
-    if (password === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }
-    dispatch(userActions.loginMW(userId, password));
+  const onChangeInputHandler = (e) => {
+    const { value, name } = e.target;
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
   };
 
   return (
@@ -73,24 +71,25 @@ function Login() {
                 src={Logo}
                 alt="Logo"
               />
-              <StInput
-                placeholder="전화번호, 사용자 이름 또는 이메일"
-                onChange={(e) => {
-                  setUserId(e.target.value);
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  dispatch(actionCreators.__login(userInfo));
                 }}
-                value={userId}
-              ></StInput>
-              <StInput
-                placeholder="비밀번호"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                type="password"
-                value={password}
-              ></StInput>
-              <StButton type="submit" onClick={handleLogin}>
-                로그인
-              </StButton>
+              >
+                <StInput
+                  placeholder="전화번호, 사용자 이름 또는 이메일"
+                  name="userId"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+                <StInput
+                  placeholder="비밀번호"
+                  name="password"
+                  onChange={onChangeInputHandler}
+                  type="password"
+                ></StInput>
+                <StButton>로그인</StButton>
+              </form>
             </StDiv>
             <StDiv>
               <StSpan>또는</StSpan>

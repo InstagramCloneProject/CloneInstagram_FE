@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Grid, Image, Input } from "../elements";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
+import { actionCreators } from "../redux/modules/user";
+
+// import validator
+import { isLength, isAlphanumeric } from "validator";
 
 // import image
 import LoginImg from "../assets/login_img.png";
@@ -10,6 +15,52 @@ import download1 from "../assets/download1.png";
 import download2 from "../assets/download2.png";
 
 function Signup() {
+  const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = useState({
+    userId: "",
+    nickName: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const onChangeInputHandler = (e) => {
+    const { value, name } = e.target;
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
+  };
+
+  const validcheck = () => {
+    if (
+      !isAlphanumeric(userInfo.userId) ||
+      !isLength(userInfo.userId, { min: 3, max: 12 })
+    ) {
+      alert("아이디는 3~12자 사이의 영문 대소문자와 숫자를 입력해주세요.");
+    }
+    if (!isLength(userInfo.nickName, { min: 3, max: 12 })) {
+      alert("닉네임은 3~12자 사이의 문자를 입력해주세요.");
+    }
+    if (
+      !isAlphanumeric(userInfo.password) ||
+      !isLength(userInfo.password, { min: 4, max: 12 })
+    ) {
+      alert("비밀번호는 4~12자 사이의 영문 대소문자, 숫자를 포함합니다.");
+    }
+    if (userInfo.password !== userInfo.confirmPassword) {
+      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+    }
+    if (
+      userInfo.userId === "" ||
+      userInfo.nickName === "" ||
+      userInfo.password === "" ||
+      userInfo.confirmPassword === ""
+    ) {
+      alert("빈칸을 채워주세요");
+      return;
+    }
+  };
+
   return (
     <React.Fragment>
       <Grid
@@ -79,13 +130,41 @@ function Signup() {
               <StLine></StLine>
             </StDiv>
 
-            <StDiv>
-              <StInput placeholder="휴대폰 번호 또는 이메일 주소"></StInput>
-              <StInput placeholder="성명"></StInput>
-              <StInput placeholder="사용자 이름"></StInput>
-              <StInput placeholder="비밀번호"></StInput>
-            </StDiv>
-            <StButton style={{ cursor: "pointer" }}>가입</StButton>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log(userInfo);
+                dispatch(actionCreators.__join(userInfo));
+              }}
+            >
+              <StDiv>
+                <StInput
+                  type="text"
+                  placeholder="휴대폰 번호 또는 이메일 주소"
+                  name="userId"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+                <StInput
+                  type="text"
+                  placeholder="사용자 이름"
+                  name="nickName"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+                <StInput
+                  type="password"
+                  placeholder="비밀번호"
+                  name="password"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+                <StInput
+                  type="password"
+                  placeholder="비밀번호 확인"
+                  name="confirmPassword"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+              </StDiv>
+              <StButton onClick={validcheck}>가입</StButton>
+            </form>
           </Grid>
 
           <Grid
@@ -207,6 +286,12 @@ const StButton = styled.button`
   border-radius: 3px;
   color: #fff;
   font-weight: bold;
+  transition: ease-in-out 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0095f6;
+  }
 `;
 
 const StLine = styled.div`
