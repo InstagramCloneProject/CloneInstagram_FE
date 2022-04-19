@@ -6,22 +6,43 @@ import { history } from "../redux/configureStore";
 import { actionCreators as feedActions } from "../redux/modules/feed";
 import Modal from "../elements/Modal";
 import PostCard from "./PostCard";
+import { useSelector, useDispatch } from "react-redux";
+import PostUpdate from "./PostUpdate";
 
-function DelPop() {
+function DelPop(props) {
+  console.log(props);
+
   //모달 상태관리
-  const [modalOpen, setModalOpen] = React.useState(true);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
+  //열기
+  const openEdit = () => {
+    setEditOpen(true);
+    setModalOpen(false);
   };
 
+  //닫기
   const closeModal = () => {
-    console.log(modalOpen);
     setModalOpen(false);
+  };
+
+  const closeEdit = () => {
+    setEditOpen(false);
+  };
+
+  const dispatch = useDispatch();
+  const delFeed = () => {
+    dispatch(feedActions.delFeedDB(props.feedId));
   };
 
   return (
     <div>
+      {editOpen && (
+        <Modal closeModal={closeModal} id={"업데이트"}>
+          <PostUpdate closeModal={closeModal} />
+        </Modal>
+      )}
       <Grid
         column="column"
         width="300px"
@@ -34,9 +55,7 @@ function DelPop() {
           display="flex"
           height="20%"
           width="100%"
-          _onClick={() => {
-            console.log("클릭");
-          }}
+          _onClick={delFeed}
           cursor="pointer"
           borderBottom="1px solid #8e8e8e"
         >
@@ -55,9 +74,7 @@ function DelPop() {
           display="flex"
           height="20%"
           width="100%"
-          _onClick={() => {
-            console.log("클릭");
-          }}
+          _onClick={openEdit}
           cursor="pointer"
           borderBottom="1px solid #8e8e8e"
         >
@@ -100,7 +117,7 @@ function DelPop() {
           display="flex"
           height="20%"
           width="100%"
-          _onClick={closeModal}
+          _onClick={props.closeModal}
           cursor="pointer"
         >
           <Text height="20%" margin="auto" cursor="pointer">
