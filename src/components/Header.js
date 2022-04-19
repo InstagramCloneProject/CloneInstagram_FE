@@ -8,21 +8,22 @@ import PostCard from "./PostCard";
 
 import { history } from "../redux/configureStore";
 import Modal from "../elements/Modal";
+import PostWrite from "./PostWrite";
 
 const Header = (props) => {
   const { children } = props;
-  // const [postWrtieModal, setPostWriteModal] = React.useState(false);
-  // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const openModal = () => {
-    setModalVisible(true);
+    setModalOpen(true);
   };
 
   const closeModal = () => {
-    setModalVisible(false);
+    setModalOpen(false);
+    // history.goBack(); // 얘는 라우팅이 없어서 뒤로가기 안해도 될듯
   };
+
   return (
     <HeaderWeb>
       <Container>
@@ -50,15 +51,9 @@ const Header = (props) => {
               }}
             />
             <Btn src="upload.png" onClick={openModal} />
-            {modalVisible && (
-              <Modal
-                modal={modalVisible}
-                closable={true}
-                modalClosable={true}
-                onClose={closeModal}
-                setModalVisible={setModalVisible}
-              >
-                <PostCard />
+            {modalOpen && (
+              <Modal closeModal={closeModal}>
+                <PostWrite closeModal={closeModal} />
               </Modal>
             )}
             <Image

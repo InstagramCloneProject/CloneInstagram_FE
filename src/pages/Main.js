@@ -1,24 +1,34 @@
 import React, { useState } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as feedActions } from "../redux/modules/feed";
+import { history } from "../redux/configureStore";
+
 import styled from "styled-components";
 
 import Header from "../components/Header";
 import Follower from "../components/Follower";
 import PostCard from "../components/PostCard";
-
-import { history } from "../redux/configureStore";
 import { Grid } from "../elements";
 
 const Main = (props) => {
+  const dispatch = useDispatch();
+  // React.useEffect(() => {
+  //   dispatch(feedActions.getFeedDB());
+  // }, []);
+
+  const feed_list = useSelector((state) => state.feed.list); //feed 관련 정보만 담음
+  console.log(feed_list); // []
+
   return (
     <MainBox>
       <Header />
-      <Grid borderLine="1px solid black" padding="0 23%">
+      <Grid padding="2% 23%">
         {/* post */}
-        <PostBox
-          onClick={() => {
-            history.push("/postDetail/0");
-          }}
-        >
+        <PostBox>
+          {/* {feed_list.map((f, idx) => {
+            return <PostCard key={idx} {...f} feedId={f.feedId} />; // 댓글개수도 넘겨줘야함
+          })} */}
           <PostCard />
         </PostBox>
         <AsideBox>
@@ -36,7 +46,7 @@ const MainBox = styled.div`
   align-items: center;
 `;
 const Section = styled.div`
-  width: 76%;
+  width: 7%;
   height: 100%;
   display: flex;
 `;
