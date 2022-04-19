@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Grid, Image, Text, Input } from "../elements/index";
+import { Button, Grid, Image, Text, Input, Modal } from "../elements/index";
 
 import { history } from "../redux/configureStore";
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
@@ -14,31 +14,26 @@ const PostCard = (props) => {
   return (
     <Grid
       borderLine="2px solid #ebebeb"
-      borderRadius="3px"
+      borderRadius="10px"
       margin="20px 0 0 0"
       bg="#fff"
-      _onClick={() => {
-        history.push("/postDetail/0");
-      }}
+      width="92%"
     >
       {/* 상단 게시자 */}
       <UserBox width="100%">
         <Grid is_flex>
-          <Grid is_flex width="auto" padding="8px 0px 0px 8px">
+          <Grid is_flex width="auto" padding="0px 0px 0px 8px">
             <Image
               border="1px solid #bcbcbc"
               shape="circle"
               size="40"
               src="myprofile.png"
-              _onClick={() => {
-                history.push("/postDetail/0");
-              }}
             />
             <Text margin="0px 10px" bold>
-              hanghae123
+              {props.nickname}
             </Text>
           </Grid>
-          <Grid width="30px" margin="0px 20px">
+          <Grid width="10%" margin="0px 15px">
             <Icon src="more.png" alt="see more" />
           </Grid>
         </Grid>
@@ -56,8 +51,11 @@ const PostCard = (props) => {
       <Grid>
         <Image
           shape="rectangle"
-          src="https://cdn.univ20.com/wp-content/uploads/2015/07/74c65e31a2ac254a807006765be8fcf5-700x448.gif"
+          src={props.feedImg}
           width="100%"
+          _onClick={() => {
+            history.push(`/postDetail/${props.feedId}`);
+          }}
         />
       </Grid>
 
@@ -80,14 +78,14 @@ const PostCard = (props) => {
           )}
           <Icon
             onClick={() => {
-              history.push("/postDetail");
+              history.push(`/postDetail/${props.feedId}`);
             }}
             src="comment.png"
             alt="comment"
           />
           <Icon src="dm.png" alt="direct message" />
         </Grid>
-        <Grid width="50px">
+        <Grid width="12%">
           <Icon size="20" src="scrap.png" alt="scrap" />
         </Grid>
       </Grid>
@@ -95,19 +93,19 @@ const PostCard = (props) => {
       {/* 좋아요 개수 */}
       <Grid padding="0px 18px">
         <Text bold textAlign="left" margin="0">
-          좋아요 10개
+          {props.feedLikeCount}개
         </Text>
       </Grid>
 
       {/* 본문 */}
       <Grid display="flex" padding="0 5px 0 18px">
         <Grid is_flex>
-          <Text bold textAlign="left">
-            hanghae123
+          <Text bold textAlign="left" margin="10px 0px">
+            {props.nickname}
           </Text>
           <Ellipsis>
             <Text textAlign="left" margin="0px 10px">
-              CSS 너무 어려워....방망이 깎는 장인...
+              {props.content}
             </Text>
           </Ellipsis>
         </Grid>
@@ -116,15 +114,33 @@ const PostCard = (props) => {
 
       {/* 댓글모두보기 버튼 */}
       <Grid padding="0 5px 0 18px">
-        <Text color="#8e8e8e" cursor="pointer" textAlign="left">
+        <Text
+          color="#8e8e8e"
+          cursor="pointer"
+          textAlign="left"
+          margin="10px 0px"
+          _onClick={() => {
+            history.push(`/postDetail/${props.feedId}`);
+          }}
+        >
+          {/* 프롭스에서 넘겨받은 데이터 */}
           "댓글 15개 모두보기"
         </Text>
+        {/* {modalOpen && (
+          <Modal closeModal={closeModal}>
+            <PostDetail />
+          </Modal>
+        )} */}
+        <Grid Control="left" display="flex">
+          <Text bold>sparta</Text>
+          <Text margin="0px 10px"> 스티치 귀여워요!🔥🔥🔥 </Text>
+        </Grid>
       </Grid>
 
       {/* 작성시간 */}
       <Grid padding="5px 16px 16px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
-          15시간 전
+          {props.feedCreateAt}
         </Text>
       </Grid>
 
@@ -140,13 +156,23 @@ const PostCard = (props) => {
           <Grid width="300px">
             <Input border="none" placeholder="댓글 달기..."></Input>
           </Grid>
-          <Text bold color="#0095F6" cursor="pointer">
+          <Text bold color="#0095F6" cursor="pointer" margin="10px 0px">
             게시
           </Text>
         </Grid>
       </CommentBox>
     </Grid>
   );
+};
+
+PostCard.defaultProps = {
+  feedImg:
+    "https://cdn.univ20.com/wp-content/uploads/2015/07/74c65e31a2ac254a807006765be8fcf5-700x448.gif",
+  content: "CSS 너무 어려워....방망이 깎는 장인...🤮",
+  feedId: 1,
+  nickname: "hanghae123",
+  feedLikeCount: "0",
+  feedCreateAt: "1일 전",
 };
 
 const UserBox = styled.div`
@@ -176,7 +202,6 @@ const Icon = styled.img`
   cursor: pointer;
 `;
 
-PostCard.defaultProps = {};
 const Ellipsis = styled.div`
   /* position: relative; */
   text-align: left;
@@ -194,8 +219,8 @@ const Ellipsis = styled.div`
   width: 93%;
   line-height: 2rem;
   -webkit-line-clamp: unset;
-  }
 `;
+
 const EButton = styled.button`
   max-height: 2rem;
   padding-left: 20px;
