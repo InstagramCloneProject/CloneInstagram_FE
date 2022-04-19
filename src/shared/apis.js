@@ -2,7 +2,7 @@ import axios from "axios";
 import { history } from "../redux/configureStore";
 
 const api = axios.create({
-  //   baseURL: "변경필요",
+  baseURL: "http://hyeonjun.shop/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -66,7 +66,7 @@ export const apis = {
     api.patch(`/comment/${commentId}`, { comment }),
 
   // user
-  login: (payload) => api.post("/user/login", payload),
-  join: (payload) => api.post("/user/join", payload),
+  login: (payload) => api.post("/api/user/login", payload),
+  join: (payload) => api.post("/api/user/join", payload),
   // userinfo: () => api.get(`/userinfo`),
 };

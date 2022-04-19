@@ -33,7 +33,7 @@ function App() {
             exact
             component={PostDetail}
           ></Route>
-          <Route path="/profile" exact component={Profile}></Route>
+          <Route path="/profile/:userId" exact component={Profile}></Route>
           <Route path="/profileEdit" exact component={ProfileEdit}></Route>
         </Switch>
       </ConnectedRouter>

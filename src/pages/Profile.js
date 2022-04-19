@@ -15,18 +15,20 @@ import { Avatar } from "@mui/material";
 import { BsGrid3X3 } from "react-icons/bs";
 import { useEffect } from "react";
 import { actionCreators } from "../redux/modules/feed";
+import { actionCreators as userActions } from "../redux/modules/user";
 
-function Profile() {
+function Profile(props) {
   const dispatch = useDispatch();
 
   // state data
+  const _user = useSelector((state) => state.user);
   const _feed = useSelector((state) => state.feed);
 
   const feed_list = _feed.list;
   console.log(feed_list);
 
   useEffect(() => {
-    dispatch(actionCreators.getFeed());
+    dispatch(actionCreators.getFeedDB());
   }, []);
 
   return (

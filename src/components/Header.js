@@ -3,6 +3,9 @@ import React from "react";
 import styled from "styled-components";
 import { Grid, Image, Input } from "../elements/index";
 
+// 추가 import react-redux
+import { useDispatch, useSelector } from "react-redux";
+
 import Container from "../elements/Container";
 import PostCard from "./PostCard";
 
@@ -12,6 +15,8 @@ import PostWrite from "./PostWrite";
 
 const Header = (props) => {
   const { children } = props;
+
+  const __userID = localStorage.getItem("user_Id");
 
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -61,7 +66,7 @@ const Header = (props) => {
               size="24"
               paddingLeft="20px"
               _onClick={() => {
-                history.push("/profile");
+                history.push(`/profile/${__userID}`);
               }}
               cursor="pointer"
             ></Image>

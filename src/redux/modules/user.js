@@ -19,6 +19,7 @@ const initialstate = {
   is_login: false,
   userId: "",
   nickName: "",
+  user: [],
 };
 
 // middleware
@@ -34,16 +35,21 @@ const __login = (payload) => (dispatch, getState) => {
       localStorage.setItem("access_token", atoken);
       localStorage.setItem("refresh_token", rtoken);
 
-      const { userId, nickName, profileImgUrl } = jwtDecode(atoken);
-      console.log("Decoded atoken", userId, nickName);
+      const decodedToken = jwtDecode(atoken);
+      console.log(decodedToken);
+
+      const { userId, nickName, profileImg, user_Id } = jwtDecode(atoken);
+
       localStorage.setItem("userId", userId);
       localStorage.setItem("nickName", nickName);
-      localStorage.setItem("profileImgUrl", profileImgUrl);
-      dispatch(login({ userId: userId, nickName: nickName }));
+      localStorage.setItem("profileImgUrl", profileImg);
+      localStorage.setItem("user_Id", user_Id);
+      dispatch(login({ userId: userId, nickName: nickName, user_Id: user_Id }));
       history.replace("/main");
     })
     .catch((error) => {
-      alert(error.response.data.message);
+      console.log(error);
+      // alert(error.response.data.message);
     });
 };
 
@@ -76,8 +82,8 @@ export default handleActions(
       produce(state, (draft) => {
         console.log("로그인 state", state);
         console.log("로그인 action", action);
-        draft.userId = action.payload.userId;
-        draft.nickName = action.payload.nickName;
+        draft.userId = action.payload.payload.userId;
+        draft.nickName = action.payload.payload.nickName;
         draft.is_login = true;
       }),
     [LOG_OUT]: (state, action) =>
