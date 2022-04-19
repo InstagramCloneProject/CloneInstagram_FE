@@ -34,5 +34,8 @@
     }
   ],
   "comments": [{ "id": 1, "body": "some comment", "postId": 1 }],
-  "profile": { "name": "typicode" }
+  "profile": { "name": "typicode" },
+  "user": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJtaW53b28xMjAyIiwibmlja05hbWUiOiLrsJXrr7zsmrAiLCJpYXQiOjE1MTYyMzkwMjJ9.wlcFa9IpqGr-HUVTrisNiQd1nYPBWVZoasoNtUYSMUA"
+  }
 }

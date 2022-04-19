@@ -2,8 +2,27 @@ import styled from "styled-components";
 import React from "react";
 
 const Image = (props) => {
-  const { shape, src, size, _onClick, cursor, border } = props; //onClick 추가
-  const styles = { src: src, size: size, cursor: cursor, border: border };
+  const {
+    shape,
+    src,
+    size,
+    _onClick,
+    cursor,
+    border,
+    bgimage,
+    bgorigin,
+    bgclip,
+  } = props; //onClick 추가
+  const styles = {
+    src: src,
+    size: size,
+    cursor: cursor,
+    border: border,
+    //추가
+    bgimage: bgimage,
+    bgorigin: bgorigin,
+    bgclip: bgclip,
+  };
 
   if (shape === "circle") {
     return <ImageCircle onClick={_onClick} {...styles}></ImageCircle>; //onClick 일괄추가
@@ -32,6 +51,9 @@ Image.defaultProps = {
   _onClick: () => {},
   cursor: "",
   border: "",
+  bgimage: "",
+  bgclip: "",
+  bgorigin: "",
 };
 
 //포스팅이미지
@@ -45,6 +67,9 @@ const ImageDefault = styled.div`
   //추가
   cursor: ${(props) => props.cursor};
   border: ${(props) => props.border};
+  background-image: ${(props) => props.bgimage};
+  background-clip: ${(props) => props.bgclip};
+  background-origin: ${(props) => props.bgorigin};
 `;
 
 const RectangleOuter = styled.div`
@@ -63,6 +88,9 @@ const RectangleInner = styled.div`
   //추가
   cursor: ${(props) => props.cursor};
   border: ${(props) => props.border};
+  background-image: ${(props) => props.bgimage};
+  background-clip: ${(props) => props.bgclip};
+  background-origin: ${(props) => props.bgorigin};
 `;
 
 const ImageCircle = styled.div`
@@ -77,6 +105,9 @@ const ImageCircle = styled.div`
   //추가
   cursor: ${(props) => props.cursor};
   border: ${(props) => props.border};
+  background-image: ${(props) => props.bgimage};
+  background-clip: ${(props) => props.bgclip};
+  background-origin: ${(props) => props.bgorigin};
 `;
 
 export default Image;

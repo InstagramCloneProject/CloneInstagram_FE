@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, Image, Input } from "../elements";
 import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
 import { history } from "../redux/configureStore";
+import { useDispatch } from "react-redux";
+import { actionCreators } from "../redux/modules/user";
 
 // import image
 import LoginImg from "../assets/login_img.png";
@@ -10,8 +12,24 @@ import Logo from "../assets/logo.png";
 import download1 from "../assets/download1.png";
 import download2 from "../assets/download2.png";
 import { Link } from "react-router-dom";
+import ImageUpload from "../components/ImageUpload";
 
 function Login() {
+  const dispatch = useDispatch();
+
+  const [userInfo, setUserInfo] = useState({
+    userId: "",
+    password: "",
+  });
+
+  const onChangeInputHandler = (e) => {
+    const { value, name } = e.target;
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
+  };
+
   return (
     <React.Fragment>
       <Grid
@@ -53,17 +71,26 @@ function Login() {
                 src={Logo}
                 alt="Logo"
               />
-              <StInput placeholder="전화번호, 사용자 이름 또는 이메일"></StInput>
-              <StInput placeholder="비밀번호"></StInput>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  dispatch(actionCreators.__login(userInfo));
+                }}
+              >
+                <StInput
+                  placeholder="전화번호, 사용자 이름 또는 이메일"
+                  name="userId"
+                  onChange={onChangeInputHandler}
+                ></StInput>
+                <StInput
+                  placeholder="비밀번호"
+                  name="password"
+                  onChange={onChangeInputHandler}
+                  type="password"
+                ></StInput>
+                <StButton>로그인</StButton>
+              </form>
             </StDiv>
-            <StButton
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                history.push("/main");
-              }}
-            >
-              로그인
-            </StButton>
             <StDiv>
               <StSpan>또는</StSpan>
               <StLine></StLine>
@@ -228,6 +255,12 @@ const StButton = styled.button`
   border-radius: 3px;
   color: #fff;
   font-weight: bold;
+  transition: ease-in-out 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0095f6;
+  }
 `;
 
 const StLine = styled.div`

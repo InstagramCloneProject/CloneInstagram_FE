@@ -33,6 +33,8 @@ const Grid = (props) => {
     items,
     top,
     left,
+    hover,
+    cursor,
   } = props;
 
   const styles = {
@@ -64,6 +66,8 @@ const Grid = (props) => {
     items,
     top,
     left,
+    hover,
+    cursor,
   };
   return (
     <React.Fragment>
@@ -99,6 +103,8 @@ Grid.defaultProps = {
   borderLeft: false,
   borderTop: false,
   items: false,
+  hover: false,
+  cursor: "",
 };
 
 const GridBox = styled.div`
@@ -120,8 +126,8 @@ const GridBox = styled.div`
   ${(props) =>
     props.center_align
       ? `display : flex; align-items: center; justify-content: space-between`
-      : ""} 
-    height: ${(props) => props.height};
+      : ""}
+  height: ${(props) => props.height};
   float: ${(props) => props.float};
   border-bottom: ${(props) => props.borderBottom};
   flex-direction: ${(props) => props.column};
@@ -133,8 +139,8 @@ const GridBox = styled.div`
       : "justify-content: space-between;"};
   ${(props) => (props.baseline ? `align-items: baseline;` : "")}
   ${(props) => (props.overflow ? `overflow:scroll;` : "")}
-    justify-content :${(props) => props.Control}
-    ${(props) =>
+  justify-content: ${(props) => props.Control};
+  ${(props) =>
     props.Reaction
       ? "@media (max-width: 935px) { width: 100%;padding: 3%}"
       : ""}
@@ -143,8 +149,10 @@ const GridBox = styled.div`
   ${(props) => (props.borderTop ? `border-top: ${props.borderT};` : "")}
   ${(props) => (props.borderLeft ? `border-left: ${props.borderL};` : "")}
   ${(props) => (props.items ? `align-items: ${props.items};` : "")}
-  ${(props) => (props.top ? `top: ${props.top};` : "")}
+  ${(props) => (props.top ? `top: ${props.top};` : "")} 
   ${(props) => (props.left ? `left: ${props.left};` : "")}
+  ${(props) => (props.hover ? `&:hover:{${props.hover}} ;` : "")}
+  cursor: ${(props) => props.cursor};
 `;
 
 export default Grid;
