@@ -12,23 +12,27 @@ const GET_DETAIL = "GET_DETAIL";
 
 // action creator
 const setFeed = createAction(SET_FEED, (feed_list) => feed_list); //중괄호 여부 체크 필요!
-const getDetail = createAction(GET_DETAIL, (detailFeed) => ({ detailFeed }));
-const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
+const getDetail = createAction(GET_DETAIL, (FeedInfo) => FeedInfo);
+// const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
 const delFeed = createAction(DEL_FEED, (feedId) => ({ feedId }));
-const editFeed = createAction(EDIT_FEED, (payload) => ({ payload }));
+const editFeed = createAction(EDIT_FEED, (feedId, content) => ({
+  feedId,
+  content,
+}));
 
 // initialState
 const initialState = {
+  feedInfo: null,
   list: [],
   follow_list: [],
 };
 
 const initialPost = {
   preview: "",
-  feedId: 1,
-  nickname: "coooooodinnngg",
+  id: 1,
+  nickName: "coooooodinnngg",
   createdAt: "2021-02-27 10:00:00",
-  imageUrl:
+  feedImg:
     "https://velog.velcdn.com/images/gagyeong/post/d1481a6f-0583-4610-b253-4a9c6efc03cf/image.png",
 };
 
@@ -36,10 +40,10 @@ const initialPost = {
 const getFeedDB = () => {
   return async function (dispatch, getState) {
     try {
-      // const { data } = await apis.get();
-      const { data } = RES;
-      console.log("RES 데이터 보기", data); //undefined
-      dispatch(setFeed(data));
+      const { data } = await apis.get();
+      console.log(data);
+      const feed_list = data.feedList;
+      dispatch(setFeed(feed_list));
     } catch {
       alert("데이터를 불러오지 못했습니다.");
     }
@@ -49,11 +53,9 @@ const getFeedDB = () => {
 const getDetailDB = (feedId) => {
   return async function (dispatch, getState) {
     try {
-      console.log("상세정보받으러 간다!");
       const { data } = await apis.getDetail(feedId);
-      console.log("상세정보 확인", data);
 
-      dispatch(getDetail(data)); //리덕스에 넘길 상세정보 재정비 할 필요 있나 확인필요
+      dispatch(getDetail(data.Feed)); //리덕스에 넘길 상세정보 재정비 할 필요 있나 확인필요
     } catch (err) {
       window.alert("상세정보 불러오기 실패");
       console.log(err);
@@ -64,29 +66,33 @@ const getDetailDB = (feedId) => {
 const addFeedDB = (file, content) => {
   return async function (dispatch, getState, { history }) {
     try {
-      console.log("업로드 통신 시작", file, content);
+      // console.log("image:", file);
+      // console.log("content:", content);
+      console.log("등록정보 모듈에 넘어갔어");
 
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append(
-        "content",
-        new Blob([JSON.stringify(content)], { type: "application/json" })
-      );
+      formData.append("image", file);
+      formData.append("content", content);
 
-      await apis.add(formData);
+      const { data } = await apis.add(formData);
+      console.log("등록후 서버에서 받는 정보", data);
 
-      const img_url = getState((state) => state.image.preview);
-      // 유저네임/유저이미지/컨텐츠이미지/컨텐츠/작성시간
-      const feed = {
-        userName: "",
-        profileimg: "",
-        feedId: "",
-        feedImg: img_url,
-        content: content,
-        feedLikeCount: 0,
-        feedCreateAt: "",
-      };
-      dispatch(addFeed(feed));
+      // const img_url = getState((state) => state.image.preview);
+      // const userId = localStorage.getItem("userId");
+      // const profileImg = localStorage.getItem("profileImgUrl");
+      // // 유저네임/유저이미지/컨텐츠이미지/컨텐츠/작성시간
+      // const feed = {
+      //   comments: [],
+      //   feedLikes: [],
+      //   user: { userId: userId },
+      //   profileImg: profileImg,
+      //   id: data.id,
+      //   feedImg: img_url,
+      //   content: content,
+      //   createdAt: data.createdAt,
+      // };
+      dispatch(getFeedDB());
+      history.replace("/main");
     } catch (err) {
       console.log(err, "업로드에 실패하였습니다.");
       window.alert("업로드에 실패하였습니다.");
@@ -95,50 +101,22 @@ const addFeedDB = (file, content) => {
 };
 
 //수정페이지에서 url 수정여부를 검사해서 보내줘야 할 듯.
-const editFeedDB = (data) => {
+const editFeedDB = (feedId, content, closeModal) => {
   return async function (dispatch, getState, { history }) {
     try {
-      console.log("수정통신", data);
+      console.log("수정디스패치", feedId, content);
 
-      const feedInfo = getState().feed.list;
-      console.log("피드정보", feedInfo);
+      const formData = new FormData();
+      formData.append("content", content);
+      const { data } = await apis.edit(feedId, formData);
 
-      const feedImg = feedInfo[0].feedImg;
+      console.log(data);
+      window.alert("피드 수정 완료!");
 
-      if (data.img_url === feedImg) {
-        const formData = new FormData();
-        formData.append(
-          "information",
-          new Blob([JSON.stringify(data.contents)], {
-            type: "application/json",
-          })
-        );
-        await apis.patch(data.feedId, formData).then((res) => {
-          window.alert("피드 수정 완료!");
-          dispatch(editFeed(data.img_url, data.feedId, data.contents));
-        });
-        // .catch((err) => {
-        //   console.log(err);
-        //   window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
-        // });
-      } else if (data.img_url !== feedImg) {
-        const formData = new FormData();
-        formData.append("file", data.file);
-        formData.append(
-          "information",
-          new Blob([JSON.stringify(data.contents)], {
-            type: "application/json",
-          })
-        );
-        await apis.patch(data.feedId, formData).then((res) => {
-          window.alert("피드 수정 완료!");
-          dispatch(editFeed(data.img_url, data.feedId, data.contents));
-        });
-        // .catch((err) => {
-        //   console.log(err);
-        //   window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
-        // });
-      }
+      dispatch(getFeedDB());
+      history.replace("/main");
+      // dispatch(editFeed(feedId, content));
+      closeModal();
     } catch (err) {
       console.log(err);
       window.alert("수정 오류가 발생하였습니다. 다시 시도해주세요.");
@@ -148,19 +126,23 @@ const editFeedDB = (data) => {
 
 const delFeedDB = (feedId) => {
   return async function (dispatch, getState, { history }) {
+    console.log("DB 삭제한다", feedId); //
+
     try {
-      const { data } = await apis.delete(feedId);
-      const _feed = getState().feed.list;
-      console.log(_feed);
-      const feed_index = _feed.findIndex((f) => {
-        return parseInt(f.feedId) === parseInt(feedId);
+      await apis.delete(feedId);
+
+      const feed_list = getState().feed.list;
+      console.log(feed_list);
+      const feed_index = feed_list.findIndex((f) => {
+        return parseInt(f.id) === parseInt(feedId);
       });
+      console.log(feed_index);
+
       dispatch(delFeed(feedId));
       history.goBack();
     } catch (err) {
       console.log(err);
       window.alert("삭제실패! 다시 시도해주세요.");
-      history.goBack();
     }
   };
 };
@@ -170,24 +152,35 @@ export default handleActions(
   {
     [SET_FEED]: (state, action) =>
       produce(state, (draft) => {
-        console.log("리듀서 피드 불러온다");
-        draft.list = action.payload.payload;
+        // console.log("리듀서 피드 불러온다", action.payload);
+        draft.list = action.payload;
+      }),
+    [GET_DETAIL]: (state, action) =>
+      produce(state, (draft) => {
+        draft.feedInfo = action.payload[0];
       }),
     [ADD_FEED]: (state, action) =>
       produce(state, (draft) => {
-        console.log("리듀서 피드 애드한다");
-        draft.list.unshift(action.payload.feed);
+        console.log("리듀서 추가로 넘어왔어.");
+        draft.list.unshift(action.payload);
       }),
     [DEL_FEED]: (state, action) =>
       produce(state, (draft) => {
-        console.log("리듀서 삭제한다.");
-        draft.list = state.list.filter(
-          (f) => f.feedId !== action.payload.feedId
-        );
+        console.log("리듀서 삭제로 넘어왔어.", action.payload);
+        draft.list = state.list.filter((f) => f.id !== action.payload);
       }),
     [EDIT_FEED]: (state, action) =>
       produce(state, (draft) => {
-        console.log("리듀서 수정한다!");
+        console.log("리듀서 수정으로 넘어왔어.", action.payload);
+        let idx = draft.list.findIndex((f) => {
+          return parseInt(f.feedId) === parseInt(action.payload.feedId);
+        });
+        draft.list[idx] = {
+          ...draft.list[idx],
+          content: action.payload.content,
+        };
+
+        console.log(draft.list[idx]);
       }),
   },
   initialState
@@ -197,6 +190,8 @@ const actionCreators = {
   addFeedDB,
   getFeedDB,
   getDetailDB,
+  delFeedDB,
+  editFeedDB,
 };
 
 export { actionCreators };

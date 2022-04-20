@@ -15,6 +15,14 @@ import emojiIcon from "../assets/icons/emoji.png";
 
 const PostCard = (props) => {
   const [is_like, setIsLike] = React.useState(false);
+  const comment_list = props.comments;
+
+  const comments = comment_list.slice(0, 2); // 두개만 떼오기 확인필요
+
+  const commentCount = comment_list.length;
+  const feedLikeCount = props.feedLikes.length;
+  console.log(props);
+
   const changeLike = () => {
     setIsLike(!is_like);
   };
@@ -49,16 +57,16 @@ const PostCard = (props) => {
               border="1px solid #bcbcbc"
               shape="circle"
               size="40"
-              src={myProfileIcon}
+              src={props.user.userInfos[0].profileImg}
             />
             <Text margin="0px 10px" bold>
-              {props.nickname}
+              {props.user.userId}
             </Text>
           </Grid>
           <Grid width="10%" margin="0px 15px">
             <Icon src={moreIcon} alt="see more" onClick={openModal} />
             {modalOpen && (
-              <Modal closeModal={closeModal} feedId={props.feedId}>
+              <Modal closeModal={closeModal} feedId={props.id}>
                 <DelPop closeModal={closeModal} {...props} />
                 {/* 피드아이디 넘겨주기위해 delPop으로 props 넘기기 되는지 확인..! */}
               </Modal>
@@ -82,7 +90,7 @@ const PostCard = (props) => {
           src={props.feedImg}
           width="100%"
           _onClick={() => {
-            history.push(`/postDetail/${props.feedId}`);
+            history.push(`/postDetail/${props.id}`);
           }}
         />
       </Grid>
@@ -121,7 +129,7 @@ const PostCard = (props) => {
       {/* 좋아요 개수 */}
       <Grid padding="0px 18px">
         <Text bold textAlign="left" margin="0">
-          {props.feedLikeCount}개
+          {feedLikeCount}개
         </Text>
       </Grid>
 
@@ -129,7 +137,7 @@ const PostCard = (props) => {
       <Grid display="flex" padding="0 5px 0 18px">
         <Grid is_flex>
           <Text bold textAlign="left" margin="10px 0px">
-            {props.nickname}
+            {props.user.userId}
           </Text>
           <Ellipsis>
             <Text textAlign="left" margin="0px 10px">
@@ -152,19 +160,23 @@ const PostCard = (props) => {
           }}
         >
           {/* 프롭스에서 넘겨받은 데이터 */}
-          "댓글 15개 모두보기"
+          "댓글 {commentCount}개 모두보기"
         </Text>
-
-        <Grid Control="left" display="flex">
-          <Text bold>sparta</Text>
-          <Text margin="0px 10px"> 스티치 귀여워요!🔥🔥🔥 </Text>
-        </Grid>
+        {/* 리스트중 2개만 뽑아오기 */}
+        {comments?.map((c, idx) => {
+          return (
+            <Grid Control="left" display="flex">
+              <Text bold>{c.user.userId}</Text>
+              <Text margin="0px 10px"> {c.content} </Text>
+            </Grid>
+          );
+        })}
       </Grid>
 
       {/* 작성시간 */}
       <Grid padding="5px 16px 16px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
-          {props.feedCreateAt}
+          {props.createdAt}
         </Text>
       </Grid>
 
@@ -193,10 +205,10 @@ PostCard.defaultProps = {
   feedImg:
     "https://cdn.univ20.com/wp-content/uploads/2015/07/74c65e31a2ac254a807006765be8fcf5-700x448.gif",
   content: "CSS 너무 어려워....방망이 깎는 장인...🤮",
-  feedId: 1,
-  nickname: "hanghae123",
+  Id: 1,
+  nickName: "hanghae123",
   feedLikeCount: "0",
-  feedCreateAt: "1일 전",
+  createdAt: "1일 전",
 };
 
 const UserBox = styled.div`

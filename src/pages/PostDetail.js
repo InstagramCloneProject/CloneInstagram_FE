@@ -18,19 +18,22 @@ import emojiIcon from "../assets/icons/emoji.png";
 import DelPop from "../components/DelPop";
 import Modal from "../elements/Modal";
 
-function PostDetail() {
+function PostDetail(props) {
   const dispatch = useDispatch();
 
   const params = useParams();
-  const Id = params.feedId;
-  console.log(Id);
+  const id = params.feedId;
+  // console.log(id);
 
-  // React.useEffect(() => {
-  //   dispatch(feedActions.getDetailDB(Id));
-  // }, []);
+  React.useEffect(() => {
+    dispatch(feedActions.getDetailDB(id));
+    // console.log("상세페이지 유즈이펙트 실행");
+  }, []);
 
-  // const feed = useSelector((state) => state.feed.list);
-  // const username = useSelector((state) => state.user.user); //변수명 일치시키기
+  //게시글 정보
+  const feedInfo = useSelector((state) => state.feed.feedInfo);
+  // const feedLikeCount = feedLikes.length;
+  console.log(feedInfo);
 
   const [is_like, setIsLike] = React.useState(false);
   const changeLike = () => {
@@ -72,7 +75,10 @@ function PostDetail() {
             borderRadius="3px"
           >
             {/* 좌측 사진 */}
-            <Picture> 사진 배경화면 </Picture>
+            <Picture
+              // style={{ backgroundImage: `url(${feedInfo?.feedImg})` }}
+              style={{ backgroundImage: `url(${feedInfo?.feedImg})` }}
+            />
 
             {/* 우측 게시글 */}
             <Grid width="45%" height="100%">
@@ -94,10 +100,10 @@ function PostDetail() {
                       border="1px solid #bcbcbc"
                       shape="circle"
                       size="40"
-                      src={myProfileIcon} //프로필 url 받아오기
+                      src={feedInfo?.user.userInfos[0].profileImg}
                     />
                     <Text margin="10px" bold>
-                      hanghae123
+                      {feedInfo?.user.userId}
                     </Text>
                     <Text margin="10px 0"> • </Text>
                     <Text bold margin="10px 10px" color="#0095F6">
@@ -121,55 +127,62 @@ function PostDetail() {
                   width="100%"
                   height="90%"
                 >
-                  {/* 컨텐츠 부분 */}
+                  {/* 컨텐츠 부분  스크롤필요!!*/}
                   <Grid width="100%" height="63%">
                     <Grid
-                      display="flex"
+                      column="column"
                       justifyContent="left"
-                      width=""
-                      height="30%"
+                      width="100%"
+                      height="50%"
                     >
-                      <Image
-                        border="1px solid #bcbcbc"
-                        shape="circle"
-                        size="40"
-                        src={myProfileIcon} //프로필 url 받아오기
-                      />
-                      <Text bold textAlign="left" margin="13px">
-                        hanghae123
-                      </Text>
-                      <Text margin="13px" textAlign="left">
-                        CSS 모태!!!
-                      </Text>
-                    </Grid>
-                    <Grid height="100%" padding="0px 10px 0px 55px">
-                      <Grid column="column" width="100%" height="35%">
+                      <Grid display="flex" justifyContent="left" height="40%">
+                        <Image
+                          border="1px solid #bcbcbc"
+                          shape="circle"
+                          size="40"
+                          src={feedInfo?.user.userInfos[0].profileImg}
+                        />
+                        <Text bold textAlign="left" margin="13px">
+                          {feedInfo?.user.userId}
+                        </Text>
+                      </Grid>
+                      <Grid height="20%">
+                        <Text margin="0px 13px" textAlign="left">
+                          {feedInfo?.content}
+                        </Text>
+                      </Grid>
+                      <Grid height="10%">
                         <Text
-                          margin="20px 0px"
+                          margin="20px 13px"
                           color="#8e8e8e"
                           size="10px"
                           textAlign="left"
                         >
-                          15시간 전
+                          {feedInfo?.createdAt}
                         </Text>
+                      </Grid>
+                    </Grid>
+                    <Grid column="column" width="100%" height="35%">
+                      {/* 댓글 */}
+                      <Grid column="column" width="100%" height="65%">
                         <Grid
-                          column="column"
+                          display="flex"
+                          justifyContent="left"
+                          height="75%"
                           width="100%"
-                          height="65%"
-                          padding="0px 10px 0px 0px"
                         >
-                          <Grid is_flex width="42%">
-                            <Image
-                              border="1px solid #bcbcbc"
-                              shape="circle"
-                              size="40"
-                              src={myProfileIcon} // comment 렌더링할때 프로필 받아오기
-                            />
-                            <Text bold textAlign="left" margin="10px 0px">
-                              sparta111
-                            </Text>
-                          </Grid>
-                          <Text margin="0px 0px 0px 50px " textAlign="left">
+                          <Image
+                            border="1px solid #bcbcbc"
+                            shape="circle"
+                            size="35"
+                            src={myProfileIcon} // comment 렌더링할때 프로필 받아오기
+                          />
+                          <Text bold textAlign="left" margin="10px">
+                            sparta111
+                          </Text>
+                        </Grid>
+                        <Grid height="20%">
+                          <Text textAlign="left" margin="0px 10px">
                             CSS 너무 어려워!!!
                           </Text>
                         </Grid>
@@ -224,7 +237,7 @@ function PostDetail() {
                       </Grid>
                       <Grid padding="10px 8px">
                         <Text bold textAlign="left" margin="0">
-                          좋아요 10개
+                          좋아요 0개
                         </Text>
                         <Text
                           color="#8e8e8e"
@@ -232,7 +245,7 @@ function PostDetail() {
                           textAlign="left"
                           margin="5px 2px "
                         >
-                          15시간 전
+                          {feedInfo?.createdAt}
                         </Text>
                       </Grid>
                     </Grid>
@@ -279,7 +292,6 @@ export default PostDetail;
 const Picture = styled.div`
   width: 57%;
   height: 100%;
-  background-image: url(https://cdn.univ20.com/wp-content/uploads/2015/07/74c65e31a2ac254a807006765be8fcf5-700x448.gif);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -297,10 +309,10 @@ const Icon = styled.img`
   width: 24px;
   height: 24px;
   margin-right: 20px;
+  cursor: pointer;
 `;
 const CommentBox = styled.div`
   justify-content: left;
   display: flex;
-  flex: 1, 1, 0;
   border-top: 1px solid #efefef;
 `;

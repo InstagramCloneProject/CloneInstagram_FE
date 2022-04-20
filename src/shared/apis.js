@@ -14,8 +14,8 @@ api.interceptors.request.use(function (config) {
   const atoken = localStorage.getItem("access_token");
   const rtoken = localStorage.getItem("refresh_token");
 
-  config.headers.common["Authorization"] = `Bearer ${atoken}`;
-  config.headers.common["rAuthorization"] = `Bearer ${rtoken}`;
+  config.headers.common["authorization"] = `Bearer ${atoken}`;
+  config.headers.common["reauthorization"] = `Bearer ${rtoken}`;
 
   return config;
 });
@@ -52,11 +52,12 @@ api.interceptors.response.use(
 );
 
 export const apis = {
-  // post
+  // feed
+  get: () => api.get("/api/feed"),
   add: (content) => api.post("/api/feed", content),
-  edit: (id, contents) => api.patch(`/api/feed/${id}`, contents),
-  delete: (Id) => api.delete(`/api/feed/${Id}`),
-  getDetail: (Id) => api.get(`/api/feed/${Id}`),
+  edit: (id, content) => api.patch(`/api/feed/${id}`, content),
+  delete: (id) => api.delete(`/api/feed/${id}`),
+  getDetail: (id) => api.get(`/api/feed/${id}`),
 
   // comment
   addComment: (post_id, NewComment) =>
