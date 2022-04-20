@@ -10,6 +10,7 @@ const LOG_OUT = "LOG_OUT";
 const JOIN = "JOIN";
 const GET_USER = "GET_USER";
 const EDIT_PROFILE_IMG = "EDIT_PROFILE_IMG";
+const FOLLOW_USER = "FOLLOW_USER";
 
 // action creator
 const login = createAction(LOG_IN, (payload) => ({ payload }));
@@ -38,6 +39,7 @@ const getUser = createAction(
 const editProfileImg = createAction(EDIT_PROFILE_IMG, (payload) => ({
   payload,
 }));
+const follow_user = createAction(FOLLOW_USER, (payload) => ({ payload }));
 
 // initialState
 const initialstate = {
@@ -52,6 +54,7 @@ const initialstate = {
   profile_userId: "",
   profile_nickName: "",
   profile_userProfileImg: "",
+  followCheck: false,
 };
 
 // middleware
@@ -134,6 +137,22 @@ const __getUser = (payload) => (dispatch, getState) => {
   });
 };
 
+const __follow =
+  (__userId_storage, __profile_userId) => (dispatch, getState) => {
+    console.log(__userId_storage, __profile_userId);
+    apis
+      .follow_user(__userId_storage, __profile_userId)
+      .then((response) => {
+        const resData = response.data.success;
+
+        dispatch(follow_user(resData));
+        window.location.reload();
+      })
+      .catch((error) => {
+        alert("팔로우를 실패했습니다.");
+      });
+  };
+
 const __editProfileImg =
   (file, __userId, currentImageUrl) => (dispatch, getState) => {
     console.log(file, __userId, currentImageUrl);
@@ -184,6 +203,10 @@ export default handleActions(
       produce(state, (draft) => {
         draft.profile_userProfileImg = action.payload.currentImageUrl;
       }),
+    [FOLLOW_USER]: (state, action) =>
+      produce(state, (draft) => {
+        draft.followCheck = action.payload.payload;
+      }),
   },
   initialstate
 );
@@ -199,6 +222,8 @@ const actionCreators = {
   __getUser,
   editProfileImg,
   __editProfileImg,
+  follow_user,
+  __follow,
 };
 
 export { actionCreators };

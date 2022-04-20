@@ -50,7 +50,7 @@ api.interceptors.response.use(
     }
   }
 );
-const __user_Id = localStorage.getItem("user_Id");
+
 export const apis = {
   // post
   add: (content) => api.post("/api/feed", content),
@@ -71,5 +71,9 @@ export const apis = {
   getUser: (payload) => api.get(`/api/user/${payload}`),
   editProfileImg: (formData, __userId) =>
     api.patch(`/api/user/${__userId}/profileImg`, formData),
+  follow_user: (__userId_storage, __profile_userId) =>
+    api.post(`/api/user/${__userId_storage}/follow`, {
+      followId: __profile_userId,
+    }),
   // userinfo: () => api.get(`/userinfo`),
 };

@@ -26,6 +26,7 @@ function Profile(props) {
 
   // variables
   const __userId = parseInt(useParams().userId);
+  const __userId_storage = parseInt(localStorage.getItem("user_Id"));
 
   const __feeds = _user.feeds;
   const __feedCount = _user.feedCount;
@@ -35,19 +36,27 @@ function Profile(props) {
   const __profile_nickName = _user.profile_nickName;
   const __profile_userProfileImg = _user.profile_userProfileImg;
 
-  // console.log(_user);
-  // console.log(__feeds, __feedCount, __follower, __following);
-  console.log(__feeds);
+  console.log(__feeds, __feedCount, __follower, __following);
 
   useEffect(() => {
     dispatch(userActions.__getUser(__userId));
-  }, [__userId, __profile_userProfileImg]);
+  }, [
+    __userId,
+    __profile_userProfileImg,
+    __feedCount,
+    __follower,
+    __following,
+  ]);
 
   const editProfileImg = () => {
     const file = fileInput.current.files[0];
     const currentImageUrl = URL.createObjectURL(file);
 
     dispatch(userActions.__editProfileImg(file, __userId, currentImageUrl));
+  };
+
+  const handleFollow = () => {
+    dispatch(userActions.__follow(__userId_storage, __profile_userId));
   };
 
   return (
@@ -68,28 +77,47 @@ function Profile(props) {
               <Text color="#000" size="20px">
                 {__profile_userId}
               </Text>
-              <button
-                style={{
-                  width: "100px",
-                  backgroundColor: "#fff",
-                  border: "1px solid #bbb",
-                  borderRadius: "4px",
-                  fontWeight: "bold",
-                  height: "30px",
-                  marginLeft: "20px",
-                }}
-                onClick={() => {
-                  fileInput.current.click();
-                }}
-              >
-                프로필 변경
-              </button>
-              <input
-                ref={fileInput}
-                onChange={editProfileImg}
-                type="file"
-                style={{ display: "none" }}
-              ></input>
+              {__userId === __userId_storage ? (
+                <div>
+                  <button
+                    style={{
+                      width: "100px",
+                      backgroundColor: "#fff",
+                      border: "1px solid #bbb",
+                      borderRadius: "4px",
+                      fontWeight: "bold",
+                      height: "30px",
+                      marginLeft: "20px",
+                    }}
+                    onClick={() => {
+                      fileInput.current.click();
+                    }}
+                  >
+                    프로필 변경
+                  </button>
+                  <input
+                    ref={fileInput}
+                    onChange={editProfileImg}
+                    type="file"
+                    style={{ display: "none" }}
+                  ></input>
+                </div>
+              ) : (
+                <button
+                  style={{
+                    width: "100px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #bbb",
+                    borderRadius: "4px",
+                    fontWeight: "bold",
+                    height: "30px",
+                    marginLeft: "20px",
+                  }}
+                  onClick={handleFollow}
+                >
+                  팔로우
+                </button>
+              )}
             </Grid>
             <Grid
               width="100%"
