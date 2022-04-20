@@ -26,8 +26,8 @@ function App() {
 
       <ConnectedRouter history={history}>
         <Switch>
-          {/* <Route path="/" exact component={Login}></Route> */}
-          <Route path="/" exact component={DelPop}></Route>
+          <Route path="/" exact component={Login}></Route>
+          <Route path="/delpop" exact component={DelPop}></Route>
           <Route path="/signup" exact component={Signup}></Route>
           <Route path="/main" exact component={Main}></Route>
           <Route

@@ -14,8 +14,8 @@ api.interceptors.request.use(function (config) {
   const atoken = localStorage.getItem("access_token");
   const rtoken = localStorage.getItem("refresh_token");
 
-  config.headers.common["Authorization"] = `Bearer ${atoken}`;
-  config.headers.common["rAuthorization"] = `Bearer ${rtoken}`;
+  config.headers.common["authorization"] = `Bearer ${atoken}`;
+  config.headers.common["reauthorization"] = `Bearer ${rtoken}`;
 
   return config;
 });
@@ -50,7 +50,7 @@ api.interceptors.response.use(
     }
   }
 );
-
+const __user_Id = localStorage.getItem("user_Id");
 export const apis = {
   // post
   add: (content) => api.post("/api/feed", content),
@@ -68,5 +68,8 @@ export const apis = {
   // user
   login: (payload) => api.post("/api/user/login", payload),
   join: (payload) => api.post("/api/user/join", payload),
+  getUser: (payload) => api.get(`/api/user/${payload}`),
+  editProfileImg: (formData, __userId) =>
+    api.patch(`/api/user/${__userId}/profileImg`, formData),
   // userinfo: () => api.get(`/userinfo`),
 };
