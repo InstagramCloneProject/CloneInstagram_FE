@@ -3,48 +3,64 @@ import styled from "styled-components";
 import { Button, Grid, Image, Text, Input, Modal } from "../elements/index";
 
 import { history } from "../redux/configureStore";
+import { actionCreators as feedActions } from "../redux/modules/feed";
+import { actionCreators as commentActions } from "../redux/modules/feed";
+
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
 import DelPop from "./DelPop";
 
-import myProfileIcon from "../assets/icons/myprofile.png";
 import moreIcon from "../assets/icons/more.png";
 import dmIcon from "../assets/icons/dm.png";
 import commentIcon from "../assets/icons/comment.png";
 import scrapIcon from "../assets/icons/scrap.png";
-import emojiIcon from "../assets/icons/emoji.png";
 import CommentWrite from "./CommentWrite";
+import { useDispatch } from "react-redux";
+import TimeCounting from "time-counting";
 
 const PostCard = (props) => {
   const __userId = props.user.id;
-  const [is_like, setIsLike] = React.useState(false);
-  const [comment_like, setCommentLike] = React.useState(false);
   const comment_list = props.comments;
 
-  const comments = comment_list.slice(0, 2); // 두개만 떼오기 확인필요
+  const dispatch = useDispatch();
+  const userId = localStorage.getItem("userId");
+
+  const comments = comment_list.slice(0, 2);
 
   const commentCount = comment_list.length;
   const feedLikeCount = props.feedLikes.length;
-  console.log(props);
 
-  const changeLike = () => {
-    setIsLike(!is_like);
+  //피드좋아요
+
+  const [is_like, setIsLike] = React.useState("");
+
+  const feedLike = () => {
+    dispatch(feedActions.feedLikeDB(props.id, setIsLike));
   };
-  const changeCLike = () => {
-    setCommentLike(!comment_like);
+
+  const feedUnlike = () => {
+    dispatch(feedActions.feedUnlikeDB(props.id, setIsLike));
   };
-  //모달 상태관리
+
+  //댓글 좋아요
+  const [comment_like, setCommentLike] = React.useState("");
+
+  //모달
   const [modalOpen, setModalOpen] = React.useState(false);
   const [delOpen, setDelOpen] = React.useState(false);
 
-  //열기
   const openModal = () => {
     setModalOpen(true);
   };
 
-  //닫기
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  // 작성시간
+  const option = {
+    lang: "ko",
+  };
+  const createdAt = TimeCounting(props.createdAt, option);
 
   return (
     <Grid
@@ -74,15 +90,18 @@ const PostCard = (props) => {
               {props.user.userId}
             </Text>
           </Grid>
-          <Grid width="10%" margin="0px 15px">
-            <Icon src={moreIcon} alt="see more" onClick={openModal} />
-            {modalOpen && (
-              <Modal closeModal={closeModal} feedId={props.id}>
-                <DelPop closeModal={closeModal} {...props} />
-                {/* 피드아이디 넘겨주기위해 delPop으로 props 넘기기 되는지 확인..! */}
-              </Modal>
-            )}
-          </Grid>
+          {props.user.userId === userId ? (
+            <Grid width="10%" margin="0px 15px">
+              <Icon src={moreIcon} alt="see more" onClick={openModal} />
+              {modalOpen && (
+                <Modal closeModal={closeModal} feedId={props.id}>
+                  <DelPop closeModal={closeModal} {...props} />
+                </Modal>
+              )}
+            </Grid>
+          ) : (
+            ""
+          )}
         </Grid>
       </UserBox>
 
@@ -101,18 +120,18 @@ const PostCard = (props) => {
       {/* 하단 아이콘 */}
       <Grid is_flex>
         <Grid is_flex width="auto" padding="10px 16px">
-          {is_like ? (
+          {props.feedLikes[0]?.likeId === userId || is_like ? (
             <RiHeart3Fill
               style={{ cursor: "pointer" }}
               size="28"
               color="#ed4a57"
-              onClick={changeLike}
+              onClick={feedUnlike}
             />
           ) : (
             <RiHeart3Line
               style={{ cursor: "pointer" }}
               size="28"
-              onClick={changeLike}
+              onClick={feedLike}
             />
           )}
           <Icon
@@ -132,7 +151,7 @@ const PostCard = (props) => {
       {/* 좋아요 개수 */}
       <Grid padding="0px 18px">
         <Text bold textAlign="left" margin="0">
-          {feedLikeCount}개
+          좋아요 {feedLikeCount}개
         </Text>
       </Grid>
 
@@ -169,11 +188,12 @@ const PostCard = (props) => {
             history.push(`/postDetail/${props.feedId}`);
           }}
         >
-          {/* 프롭스에서 넘겨받은 데이터 */}
           "댓글 {commentCount}개 모두보기"
         </Text>
-        {/* 리스트중 2개만 뽑아오기 */}
+
+        {/* 댓글 목록 */}
         {comments?.map((c, idx) => {
+          console.log(c);
           return (
             <Grid is_flex height="10%" key={idx}>
               <Grid Control="left" display="flex">
@@ -184,19 +204,34 @@ const PostCard = (props) => {
               </Grid>
 
               <Grid width="10%" padding="0 20px">
-                {/* 로직수정필요 */}
-                {props.comments[idx].comment_like ? (
+                {c.commentLikes?.likeId === userId || comment_like ? (
                   <RiHeart3Fill
                     style={{ cursor: "pointer" }}
                     size="15"
                     color="#ed4a57"
-                    onClick={changeCLike}
+                    onClick={() => {
+                      dispatch(
+                        commentActions.commentUnlikeDB(
+                          props.id,
+                          c.id,
+                          setCommentLike
+                        )
+                      );
+                    }}
                   />
                 ) : (
                   <RiHeart3Line
                     style={{ cursor: "pointer" }}
                     size="15"
-                    onClick={changeCLike}
+                    onClick={() => {
+                      dispatch(
+                        commentActions.commentLikeDB(
+                          props.id,
+                          c.id,
+                          setCommentLike
+                        )
+                      );
+                    }}
                   />
                 )}
               </Grid>
@@ -208,7 +243,7 @@ const PostCard = (props) => {
       {/* 작성시간 */}
       <Grid padding="15px 16px 0px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
-          {props.createdAt}
+          {createdAt}
         </Text>
       </Grid>
 

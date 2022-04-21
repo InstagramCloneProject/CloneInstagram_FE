@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as feedActions } from "../redux/modules/feed";
 
+import TimeCounting from "time-counting";
+
 import myProfileIcon from "../assets/icons/myprofile.png";
 import moreIcon from "../assets/icons/more.png";
 import dmIcon from "../assets/icons/dm.png";
@@ -21,31 +23,26 @@ import CommentItem from "../components/CommentItem";
 import CommentWrite from "../components/CommentWrite";
 
 function PostDetail(props) {
+  React.useEffect(() => {
+    dispatch(feedActions.getDetailDB(id));
+  }, []);
+
   const dispatch = useDispatch();
 
   const params = useParams();
   const id = params.feedId;
-  // console.log(id);
-
-  React.useEffect(() => {
-    dispatch(feedActions.getDetailDB(id));
-    // console.log("상세페이지 유즈이펙트 실행");
-  }, []);
-
-  //게시글 정보
-  const feedInfo = useSelector((state) => state.feed.feedInfo); //state.store.키값
-  console.log(feedInfo);
-  // const feedLikeCount = feedLikes.length;
-  const comment_list = feedInfo?.comments;
-
-  const [is_like, setIsLike] = React.useState(false);
-  const changeLike = () => {
-    setIsLike(!is_like);
-  };
 
   //모달 상태관리
   const [modalOpen, setModalOpen] = React.useState(true);
   const [delOpen, setDelOpen] = React.useState(false);
+
+  //게시글 정보
+  const feedInfo = useSelector((state) => state.feed.feedInfo); //state.store.키값
+  console.log(feedInfo);
+
+  const comment_list = feedInfo?.comments;
+  const userId = localStorage.getItem("userId");
+  const feedLikeCount = feedInfo?.feedLikes?.length;
 
   //열기
   const openModal = () => {
@@ -66,6 +63,31 @@ function PostDetail(props) {
     setDelOpen(false);
   };
 
+  //피드좋아요
+  const changeLike = () => {
+    setIsLike(!is_like);
+  };
+  const [is_like, setIsLike] = React.useState("");
+
+  const feedLike = () => {
+    dispatch(feedActions.feedLikeDB(feedInfo.id, setIsLike));
+  };
+
+  const feedUnlike = () => {
+    dispatch(feedActions.feedUnlikeDB(feedInfo.id, setIsLike));
+  };
+
+  // 작성시간
+  const option = {
+    lang: "ko",
+  };
+  const createdAt = TimeCounting(feedInfo?.createdAt, option);
+
+  if (feedInfo.length == 0) {
+    console.log("제발 오류 ㄴㄴ");
+    return <></>;
+  }
+
   return (
     <>
       {modalOpen && (
@@ -78,10 +100,7 @@ function PostDetail(props) {
             borderRadius="3px"
           >
             {/* 좌측 사진 */}
-            <Picture
-              // style={{ backgroundImage: `url(${feedInfo?.feedImg})` }}
-              style={{ backgroundImage: `url(${feedInfo?.feedImg})` }}
-            />
+            <Picture style={{ backgroundImage: `url(${feedInfo?.feedImg})` }} />
 
             {/* 우측 게시글 */}
             <Grid width="45%" height="100%">
@@ -103,7 +122,7 @@ function PostDetail(props) {
                       border="1px solid #bcbcbc"
                       shape="circle"
                       size="40"
-                      src={feedInfo?.user.userInfos[0].profileImg}
+                      src={feedInfo.user.userInfos[0]?.profileImg}
                     />
                     <Text margin="10px" bold>
                       {feedInfo?.user.userId}
@@ -113,9 +132,14 @@ function PostDetail(props) {
                       팔로잉
                     </Text>
                   </Grid>
-                  <Grid width="5%" margin="0px 20px" _onClick={openDel}>
-                    <Icon src={moreIcon} alt="see more" />
-                  </Grid>
+                  {feedInfo.user.userId === userId ? (
+                    <Grid width="5%" margin="0px 20px" _onClick={openDel}>
+                      <Icon src={moreIcon} alt="see more" />
+                    </Grid>
+                  ) : (
+                    ""
+                  )}
+
                   {delOpen && (
                     <Modal closeModal={closeModal}>
                       <DelPop closeDel={closeDel} />
@@ -143,10 +167,10 @@ function PostDetail(props) {
                           border="1px solid #bcbcbc"
                           shape="circle"
                           size="40"
-                          src={feedInfo?.user.userInfos[0].profileImg}
+                          src={feedInfo.user.userInfos[0].profileImg}
                         />
                         <Text bold textAlign="left" margin="13px">
-                          {feedInfo?.user.userId}
+                          {feedInfo.user.userId}
                         </Text>
                       </Grid>
                       <Grid height="20%">
@@ -161,7 +185,7 @@ function PostDetail(props) {
                           size="10px"
                           textAlign="left"
                         >
-                          {feedInfo?.createdAt}
+                          {createdAt}
                         </Text>
                       </Grid>
                     </Grid>
@@ -199,7 +223,8 @@ function PostDetail(props) {
                       {/* 이모티콘 줄 */}
                       <Grid is_flex width="100%" height="30%" padding="5px 8px">
                         <Grid is_flex width="38%">
-                          {is_like ? (
+                          {feedInfo?.feedLikes[0]?.likeId === userId ||
+                          is_like ? (
                             <RiHeart3Fill
                               style={{
                                 cursor: "pointer",
@@ -207,7 +232,7 @@ function PostDetail(props) {
                               }}
                               size="28"
                               color="#ed4a57"
-                              onClick={changeLike}
+                              onClick={feedUnlike}
                             />
                           ) : (
                             <RiHeart3Line
@@ -216,7 +241,7 @@ function PostDetail(props) {
                                 margin: "0px 10px 0px 0px",
                               }}
                               size="28"
-                              onClick={changeLike}
+                              onClick={feedLike}
                             />
                           )}
                           <Icon
@@ -234,7 +259,7 @@ function PostDetail(props) {
                       </Grid>
                       <Grid padding="10px 8px">
                         <Text bold textAlign="left" margin="0">
-                          좋아요 0개
+                          좋아요 {feedLikeCount}개
                         </Text>
                         <Text
                           color="#8e8e8e"
@@ -242,7 +267,7 @@ function PostDetail(props) {
                           textAlign="left"
                           margin="5px 2px "
                         >
-                          {feedInfo?.createdAt}
+                          {createdAt}
                         </Text>
                       </Grid>
                     </Grid>

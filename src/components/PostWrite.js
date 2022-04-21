@@ -61,7 +61,7 @@ function PostWrite({ closeModal, children }) {
               src={arrowIcon}
               alt="화살표"
               onClick={() => {
-                console.log("삭제하기 모달 띄우기");
+                closeModal();
               }}
             />
           </Grid>

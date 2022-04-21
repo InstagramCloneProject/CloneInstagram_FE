@@ -58,11 +58,16 @@ export const apis = {
   edit: (id, content) => api.patch(`/api/feed/${id}`, content),
   delete: (id) => api.delete(`/api/feed/${id}`),
   getDetail: (id) => api.get(`/api/feed/${id}`),
+  like: (id, likeId) => api.post(`/api/feed/${id}/likes`, { likeId }),
+  unLike: (id) => api.delete(`/api/feed/${id}/unlikes`),
 
   // comment
   addComment: (content, feed_Id) =>
     api.post("/api/comment", { content, feed_Id }),
   delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
+  commentLike: (commentId, likeId) =>
+    api.post(`/api/comment/${commentId}/likes`, { likeId }),
+  commentUnlike: (commentId) => api.delete(`/api/comment/${commentId}/unlikes`),
 
   // user
   login: (payload) => api.post("/api/user/login", payload),
