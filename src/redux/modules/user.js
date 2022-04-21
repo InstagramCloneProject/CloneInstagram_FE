@@ -86,6 +86,10 @@ const __logout = () => (dispatch, getState) => {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
   localStorage.removeItem("nickName");
+  localStorage.removeItem("user_Id");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("profileImgUrl");
   dispatch(logout());
   history.replace("/");
 };
