@@ -50,7 +50,7 @@ const Header = (props) => {
             <Btn
               src={homeIcon}
               onClick={() => {
-                history.push("/main");
+                history.push("/");
               }}
             />
             <Btn

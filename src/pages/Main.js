@@ -13,12 +13,12 @@ import { Grid } from "../elements";
 
 const Main = (props) => {
   const dispatch = useDispatch();
-  // React.useEffect(() => {
-  //   dispatch(feedActions.getFeedDB());
-  // }, []);
+
+  React.useEffect(() => {
+    dispatch(feedActions.getFeedDB());
+  }, []);
 
   const feed_list = useSelector((state) => state.feed.list); //feed 관련 정보만 담음
-  console.log(feed_list); // []
 
   return (
     <MainBox>
@@ -26,10 +26,10 @@ const Main = (props) => {
       <Grid padding="2% 23%">
         {/* post */}
         <PostBox>
-          {/* {feed_list.map((f, idx) => {
-            return <PostCard key={idx} {...f} feedId={f.feedId} />; // 댓글개수도 넘겨줘야함
-          })} */}
-          <PostCard />
+          {feed_list?.map((f, idx) => {
+            return <PostCard key={idx} {...f} feedId={f.id} />; // 댓글개수도 넘겨줘야함
+          })}
+          {/* <PostCard /> */}
         </PostBox>
         <AsideBox>
           <Follower />
@@ -57,9 +57,10 @@ const PostBox = styled.div`
 `;
 const AsideBox = styled.div`
   width: 400px;
+  height: 100%;
   position: fixed;
   left: calc(100vw - 46vw);
-  top: 75px;
+  top: 58px;
 `;
 
 export default Main;

@@ -32,15 +32,25 @@ function DelPop(props) {
   };
 
   const dispatch = useDispatch();
+
   const delFeed = () => {
-    dispatch(feedActions.delFeedDB(props.feedId));
+    dispatch(feedActions.delFeedDB(props.id));
+  };
+
+  const onDelete = () => {
+    if (window.confirm("정말 피드를 삭제하시겠습니까?")) {
+      delFeed();
+    } else {
+      alert("취소합니다.");
+      //모달창 끄는거 넣고싶다.
+    }
   };
 
   return (
     <div>
       {editOpen && (
         <Modal closeModal={closeModal} id={"업데이트"}>
-          <PostUpdate closeModal={closeModal} />
+          <PostUpdate closeModal={closeModal} {...props} />
         </Modal>
       )}
       <Grid
@@ -55,7 +65,7 @@ function DelPop(props) {
           display="flex"
           height="20%"
           width="100%"
-          _onClick={delFeed}
+          _onClick={onDelete}
           cursor="pointer"
           borderBottom="1px solid #8e8e8e"
         >

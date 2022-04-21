@@ -21,7 +21,9 @@ function PostWrite({ closeModal, children }) {
   const [content, setContent] = React.useState("");
 
   const file = useSelector((state) => state.image.file);
-  const userId = useSelector((state) => state.user.userId); //nickname인지 확인 필요
+  // const userId = useSelector((state) => state.user.userId); //로그인 체크 유즈이펙트 있을때 쓸 수 있음 (리듀서 정보 쓰기)
+  const userId = localStorage.getItem("userId");
+  const profileImg = localStorage.getItem("profileImgUrl");
 
   const changeContents = (e) => {
     setContent(e.target.value);
@@ -82,9 +84,9 @@ function PostWrite({ closeModal, children }) {
           </Grid>
         </Grid>
         {/* 하단이 꽉채워지지 않아서 margin으로 위아래 여백줌 */}
-        <Grid is_flex width="100%" height="100%" margin="10px 0px">
+        <Grid is_flex width="100%" height="100%">
           {/* 이미지 업로드 */}
-          <Grid width="58%" height="100%">
+          <Grid width="60%" height="100%">
             <ImageUpload />
           </Grid>
 
@@ -106,21 +108,22 @@ function PostWrite({ closeModal, children }) {
                   border="1px solid #bcbcbc"
                   shape="circle"
                   size="40"
-                  src={myProfileIcon} //프로필 url 가져오기
+                  src={profileImg} //프로필 url 가져오기
                 />
                 <Text margin="10px 0px 0px 10px" bold textAlign="left">
-                  hanghae123
-                  {/* {userId} */}
+                  {userId}
                 </Text>
               </Grid>
-              <Input
-                multiLine
-                rows="6"
-                placeholder="문구 입력..."
-                border="none"
-                value={content}
-                _onChange={changeContents}
-              />
+              <Grid>
+                <Input
+                  multiLine
+                  rows="6"
+                  placeholder="문구 입력..."
+                  border="none"
+                  value={content}
+                  _onChange={changeContents}
+                />
+              </Grid>
             </Grid>
 
             {/* 하단박스 */}
