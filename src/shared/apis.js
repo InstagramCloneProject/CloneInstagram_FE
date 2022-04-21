@@ -66,5 +66,12 @@ export const apis = {
   // user
   login: (payload) => api.post("/api/user/login", payload),
   join: (payload) => api.post("/api/user/join", payload),
+  getUser: (payload) => api.get(`/api/user/${payload}`),
+  editProfileImg: (formData, __userId) =>
+    api.patch(`/api/user/${__userId}/profileImg`, formData),
+  follow_user: (__userId_storage, __profile_userId) =>
+    api.post(`/api/user/${__userId_storage}/follow`, {
+      followId: __profile_userId,
+    }),
   // userinfo: () => api.get(`/userinfo`),
 };
