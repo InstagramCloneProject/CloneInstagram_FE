@@ -79,5 +79,9 @@ export const apis = {
     api.post(`/api/user/${__userId_storage}/follow`, {
       followId: __profile_userId,
     }),
+  unfollow_user: (__userId_storage, __profile_userId) =>
+    api.delete(`/api/user/${__userId_storage}/follow`, {
+      data: { followId: __profile_userId },
+    }),
   // userinfo: () => api.get(`/userinfo`),
 };

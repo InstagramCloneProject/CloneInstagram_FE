@@ -18,12 +18,12 @@ import { useDispatch } from "react-redux";
 import TimeCounting from "time-counting";
 
 const PostCard = (props) => {
-  console.log(props.comments);
+  const __userId = props.user.id;
+  const comment_list = props.comments;
 
   const dispatch = useDispatch();
   const userId = localStorage.getItem("userId");
 
-  const comment_list = props.comments;
   const comments = comment_list.slice(0, 2);
 
   const commentCount = comment_list.length;
@@ -80,7 +80,13 @@ const PostCard = (props) => {
               size="40"
               src={props.user.userInfos[0].profileImg}
             />
-            <Text margin="0px 10px" bold>
+            <Text
+              margin="0px 10px"
+              bold
+              _onClick={() => {
+                history.push(`/profile/${__userId}`);
+              }}
+            >
               {props.user.userId}
             </Text>
           </Grid>
@@ -152,7 +158,14 @@ const PostCard = (props) => {
       {/* 본문 */}
       <Grid display="flex" padding="0 5px 0 18px">
         <Grid is_flex>
-          <Text bold textAlign="left" margin="10px 0px">
+          <Text
+            bold
+            textAlign="left"
+            margin="10px 0px"
+            _onClick={() => {
+              history.push(`/profile/${__userId}`);
+            }}
+          >
             {props.user.userId}
           </Text>
           <Ellipsis>

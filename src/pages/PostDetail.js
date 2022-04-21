@@ -223,7 +223,7 @@ function PostDetail(props) {
                       {/* 이모티콘 줄 */}
                       <Grid is_flex width="100%" height="30%" padding="5px 8px">
                         <Grid is_flex width="38%">
-                          {feedInfo.feedLikes[0].likeId === userId ||
+                          {feedInfo?.feedLikes[0]?.likeId === userId ||
                           is_like ? (
                             <RiHeart3Fill
                               style={{

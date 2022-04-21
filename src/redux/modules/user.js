@@ -11,6 +11,7 @@ const JOIN = "JOIN";
 const GET_USER = "GET_USER";
 const EDIT_PROFILE_IMG = "EDIT_PROFILE_IMG";
 const FOLLOW_USER = "FOLLOW_USER";
+const UNFOLLOW_USER = "UNFOLLOW_USER";
 
 // action creator
 const login = createAction(LOG_IN, (payload) => ({ payload }));
@@ -25,7 +26,8 @@ const getUser = createAction(
     following,
     profile_userId,
     profile_nickName,
-    profile_userProfileImg
+    profile_userProfileImg,
+    followBool
   ) => ({
     feeds,
     feedCount,
@@ -34,12 +36,14 @@ const getUser = createAction(
     profile_userId,
     profile_nickName,
     profile_userProfileImg,
+    followBool,
   })
 );
 const editProfileImg = createAction(EDIT_PROFILE_IMG, (payload) => ({
   payload,
 }));
 const follow_user = createAction(FOLLOW_USER, (payload) => ({ payload }));
+const unfollow_user = createAction(UNFOLLOW_USER, (payload) => ({ payload }));
 
 // initialState
 const initialstate = {
@@ -54,7 +58,7 @@ const initialstate = {
   profile_userId: "",
   profile_nickName: "",
   profile_userProfileImg: "",
-  followCheck: false,
+  followBool: false,
 };
 
 // middleware
@@ -63,19 +67,25 @@ const __login = (payload) => (dispatch, getState) => {
   apis
     .login(payload)
     .then((response) => {
-      const atoken = response.data.accessToken;
-      const rtoken = response.data.refreshToken;
-      localStorage.setItem("access_token", atoken);
-      localStorage.setItem("refresh_token", rtoken);
+      try {
+        const atoken = response.data.accessToken;
+        const rtoken = response.data.refreshToken;
+        localStorage.setItem("access_token", atoken);
+        localStorage.setItem("refresh_token", rtoken);
 
-      const { userId, nickName, profileImg, user_Id } = jwtDecode(atoken);
+        const { userId, nickName, profileImg, user_Id } = jwtDecode(atoken);
 
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("nickName", nickName);
-      localStorage.setItem("profileImgUrl", profileImg);
-      localStorage.setItem("user_Id", user_Id);
-      dispatch(login({ userId: userId, nickName: nickName, user_Id: user_Id }));
-      history.replace("/main");
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("nickName", nickName);
+        localStorage.setItem("profileImgUrl", profileImg);
+        localStorage.setItem("user_Id", user_Id);
+        dispatch(
+          login({ userId: userId, nickName: nickName, user_Id: user_Id })
+        );
+        history.replace("/main");
+      } catch (error) {
+        alert("아이디나 비밀번호를 확인해주세요.");
+      }
     })
     .catch((error) => {
       // alert(error.response.data.message);
@@ -86,6 +96,10 @@ const __logout = () => (dispatch, getState) => {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
   localStorage.removeItem("nickName");
+  localStorage.removeItem("user_Id");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("profileImgUrl");
   dispatch(logout());
   history.replace("/");
 };
@@ -95,11 +109,15 @@ const __join = (payload) => (dispatch, getState) => {
   apis
     .join(payload)
     .then((response) => {
-      alert(response.data.message);
-      history.replace("/");
+      try {
+        alert(response.data.message);
+        history.replace("/");
+      } catch (error) {
+        alert("중복된 아이디가 있습니다.");
+      }
     })
     .catch((error) => {
-      alert(error.response.data.message);
+      // alert(error.response.data.message);
     });
 };
 
@@ -109,6 +127,7 @@ const __getUser = (payload) => (dispatch, getState) => {
     const feedCount = response.data.feedCount.count;
     const follower = response.data.follow.follower;
     const following = response.data.follow.following;
+    const followBool = response.data.followTrue;
     const feeds = response.data.feeds;
     const profile_userId = response.data.user.userId;
     const profile_nickName = response.data.user.nickName;
@@ -121,7 +140,8 @@ const __getUser = (payload) => (dispatch, getState) => {
       following,
       profile_userId,
       profile_nickName,
-      profile_userProfileImg
+      profile_userProfileImg,
+      followBool
     );
     dispatch(
       getUser(
@@ -131,7 +151,8 @@ const __getUser = (payload) => (dispatch, getState) => {
         following,
         profile_userId,
         profile_nickName,
-        profile_userProfileImg
+        profile_userProfileImg,
+        followBool
       )
     );
   });
@@ -143,13 +164,23 @@ const __follow =
     apis
       .follow_user(__userId_storage, __profile_userId)
       .then((response) => {
-        const resData = response.data.success;
-
-        dispatch(follow_user(resData));
         window.location.reload();
       })
       .catch((error) => {
         alert("팔로우를 실패했습니다.");
+      });
+  };
+
+const __unfollow =
+  (__userId_storage, __profile_userId) => (dispatch, getState) => {
+    console.log(__userId_storage, __profile_userId);
+    apis
+      .unfollow_user(__userId_storage, __profile_userId)
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        alert("언팔로우를 실패했습니다.");
       });
   };
 
@@ -191,10 +222,12 @@ export default handleActions(
       }),
     [GET_USER]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action);
         draft.feeds = action.payload.feeds;
         draft.follower = action.payload.follower;
         draft.following = action.payload.following;
         draft.feedCount = action.payload.feedCount;
+        draft.followBool = action.payload.followBool;
         draft.profile_userId = action.payload.profile_userId;
         draft.profile_nickName = action.payload.profile_nickName;
         draft.profile_userProfileImg = action.payload.profile_userProfileImg;
@@ -205,7 +238,13 @@ export default handleActions(
       }),
     [FOLLOW_USER]: (state, action) =>
       produce(state, (draft) => {
-        draft.followCheck = action.payload.payload;
+        console.log(action.payload);
+        draft.followBool = true;
+      }),
+    [UNFOLLOW_USER]: (state, action) =>
+      produce(state, (draft) => {
+        console.log(action.payload);
+        draft.followBool = false;
       }),
   },
   initialstate
@@ -224,6 +263,8 @@ const actionCreators = {
   __editProfileImg,
   follow_user,
   __follow,
+  unfollow_user,
+  __unfollow,
 };
 
 export { actionCreators };

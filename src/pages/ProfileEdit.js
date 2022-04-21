@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import Spinner from "../components/Spinner";
 
 import { Grid, Text, Input, Image, Button } from "../elements";
 
 function ProfileEdit() {
   return (
     <Grid width="100%" padding="100px 0 0 0" _style={{ height: "830px" }}>
-      <Spinner />
       <Grid
         is_flex
         width="930px"
@@ -16,6 +14,7 @@ function ProfileEdit() {
           border: "1px solid #bbb",
           borderRadius: "4px",
           backgroundColor: "#fff",
+          height: "100%",
         }}
       >
         <Grid
