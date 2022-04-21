@@ -167,7 +167,7 @@ const addCommentDB = (content, feed_Id) => {
         createdAt: data.createdAt,
       };
       dispatch(getFeedDB());
-      dispatch(getDetailDB(feed_Id));
+      // dispatch(getDetailDB(feed_Id));
       dispatch(addComment(feed_Id, comment));
     } catch (err) {
       console.log(err);
@@ -240,7 +240,7 @@ const commentLikeDB = (feed_Id, commentId, setCommentLike) => {
 
       dispatch(getFeedDB());
       setCommentLike(true);
-      dispatch(getDetailDB(feed_Id));
+      // dispatch(getDetailDB(feed_Id));
     } catch (err) {
       console.log(err);
       window.alert("댓글 좋아요 실패!");
@@ -258,7 +258,7 @@ const commentUnlikeDB = (feed_Id, commentId, setCommentLike) => {
 
       dispatch(getFeedDB());
       setCommentLike(false);
-      dispatch(getDetailDB(feed_Id));
+      // dispatch(getDetailDB(feed_Id));
     } catch (err) {
       console.log(err);
       window.alert("댓글 좋아요 취소 실패!");
