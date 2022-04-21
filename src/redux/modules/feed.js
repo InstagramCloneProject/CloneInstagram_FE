@@ -67,7 +67,7 @@ const getDetailDB = (feedId) => {
     console.log("상세정보 통신 시작");
     try {
       const { data } = await apis.getDetail(feedId);
-      console.log(data);
+      console.log("상세정보 DB", data);
       dispatch(getDetail(data.Feed)); //리덕스에 넘길 상세정보 재정비 할 필요 있나 확인필요
     } catch (err) {
       window.alert("상세정보 불러오기 실패");
@@ -202,6 +202,72 @@ const delCommentDB = (feed_Id, commentId) => {
   };
 };
 
+//피드 좋아요
+
+const feedLikeDB = (feed_Id, setIsLike) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("좋아요 통신 시도", feed_Id);
+    try {
+      const userId = localStorage.getItem("userId");
+      const { data } = await apis.like(feed_Id, userId);
+      console.log("좋아요 db 응답", data);
+      setIsLike(true);
+      dispatch(getDetailDB(feed_Id));
+    } catch (err) {
+      console.log(err);
+      window.alert("좋아요 실패");
+    }
+  };
+};
+
+const feedUnlikeDB = (feedId, setIsLike) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("좋아요취소 통신 시도", feedId);
+    try {
+      const userId = localStorage.getItem("userId");
+      const { data } = await apis.unLike(feedId);
+      console.log("좋아요취소 db 응답", data);
+      setIsLike(false);
+      dispatch(getDetailDB(feedId));
+    } catch (err) {
+      console.log(err);
+      window.alert("좋아요 취소 실패");
+    }
+  };
+};
+
+//댓글 좋아요
+
+const commentLikeDB = (commentId) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("좋아요 통신 시도", commentId);
+    try {
+      const userId = localStorage.getItem("userId");
+      await apis.commentLike(commentId, userId);
+
+      dispatch(getDetailDB(commentId));
+    } catch (err) {
+      console.log(err);
+      window.alert("댓글 삭제 실패, 다시 시도해 주세요.");
+    }
+  };
+};
+
+const commentUnlikeDB = (commentId) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("좋아요취소 통신 시도", commentId);
+    try {
+      const userId = localStorage.getItem("userId");
+      await apis.commentUnlike(commentId, userId);
+
+      dispatch(getDetailDB(commentId));
+    } catch (err) {
+      console.log(err);
+      window.alert("댓글 삭제 실패, 다시 시도해 주세요.");
+    }
+  };
+};
+
 // reducer
 export default handleActions(
   {
@@ -273,6 +339,10 @@ const actionCreators = {
   delComment,
   addCommentDB,
   delCommentDB,
+  feedLikeDB,
+  feedUnlikeDB,
+  commentLikeDB,
+  commentUnlikeDB,
 };
 
 export { actionCreators };

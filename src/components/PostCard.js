@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Button, Grid, Image, Text, Input, Modal } from "../elements/index";
 
 import { history } from "../redux/configureStore";
+import { actionCreators as feedActions } from "../redux/modules/feed";
+
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
 import DelPop from "./DelPop";
 
@@ -13,24 +15,48 @@ import commentIcon from "../assets/icons/comment.png";
 import scrapIcon from "../assets/icons/scrap.png";
 import emojiIcon from "../assets/icons/emoji.png";
 import CommentWrite from "./CommentWrite";
+import { useDispatch } from "react-redux";
 
 const PostCard = (props) => {
-  const [is_like, setIsLike] = React.useState(false);
-  const [comment_like, setCommentLike] = React.useState(false);
-  const comment_list = props.comments;
+  const like_list = props.feedLikes;
+  console.log(like_list);
 
+  const dispatch = useDispatch();
+  const userId = localStorage.getItem("userId");
+
+  const comment_list = props.comments;
   const comments = comment_list.slice(0, 2); // 두개만 떼오기 확인필요
 
   const commentCount = comment_list.length;
   const feedLikeCount = props.feedLikes.length;
-  console.log(props);
 
+  //피드좋아요
   const changeLike = () => {
     setIsLike(!is_like);
   };
   const changeCLike = () => {
     setCommentLike(!comment_like);
   };
+
+  const [is_like, setIsLike] = React.useState(false);
+  const [comment_like, setCommentLike] = React.useState(false);
+
+  const feedLike = () => {
+    dispatch(feedActions.feedLikeDB(props.id, setIsLike));
+  };
+
+  const feedUnlike = () => {
+    dispatch(feedActions.feedUnlikeDB(props.id, setIsLike));
+  };
+
+  const likeCheck = () => {
+    if (props.feedLikes[0]?.likeId === userId) {
+      setIsLike(true);
+    } else {
+      setIsLike(false);
+    }
+  };
+
   //모달 상태관리
   const [modalOpen, setModalOpen] = React.useState(false);
   const [delOpen, setDelOpen] = React.useState(false);
@@ -94,18 +120,18 @@ const PostCard = (props) => {
       {/* 하단 아이콘 */}
       <Grid is_flex>
         <Grid is_flex width="auto" padding="10px 16px">
-          {is_like ? (
+          {props.feedLikes[0]?.likeId === userId || is_like ? (
             <RiHeart3Fill
               style={{ cursor: "pointer" }}
               size="28"
               color="#ed4a57"
-              onClick={changeLike}
+              onClick={feedUnlike}
             />
           ) : (
             <RiHeart3Line
               style={{ cursor: "pointer" }}
               size="28"
-              onClick={changeLike}
+              onClick={feedLike}
             />
           )}
           <Icon
@@ -125,7 +151,7 @@ const PostCard = (props) => {
       {/* 좋아요 개수 */}
       <Grid padding="0px 18px">
         <Text bold textAlign="left" margin="0">
-          {feedLikeCount}개
+          좋아요 {feedLikeCount}개
         </Text>
       </Grid>
 
