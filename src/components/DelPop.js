@@ -10,8 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 import PostUpdate from "./PostUpdate";
 
 function DelPop(props) {
-  console.log(props);
-
   //모달 상태관리
   const [modalOpen, setModalOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
@@ -42,7 +40,6 @@ function DelPop(props) {
       delFeed();
     } else {
       alert("취소합니다.");
-      //모달창 끄는거 넣고싶다.
     }
   };
 

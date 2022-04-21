@@ -193,7 +193,6 @@ const PostCard = (props) => {
 
         {/* 댓글 목록 */}
         {comments?.map((c, idx) => {
-          console.log(c);
           return (
             <Grid is_flex height="10%" key={idx}>
               <Grid Control="left" display="flex">
@@ -256,7 +255,7 @@ const PostCard = (props) => {
 PostCard.defaultProps = {
   feedImg:
     "https://cdn.univ20.com/wp-content/uploads/2015/07/74c65e31a2ac254a807006765be8fcf5-700x448.gif",
-  content: "CSS 너무 어려워....방망이 깎는 장인...🤮",
+  content: "CSS ...🤮",
   Id: 1,
   nickName: "hanghae123",
   feedLikeCount: "0",

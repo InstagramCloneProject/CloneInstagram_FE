@@ -11,9 +11,7 @@ import moreIcon from "../assets/icons/more.png";
 import TimeCounting from "time-counting";
 
 function CommentItem(props) {
-  console.log("댓글 프롭스", props);
   const dispatch = useDispatch();
-  // const ComLikeCount = props.comments[props.idx].commentLikes.length; // 확인필요
   const delcomment = () => {
     dispatch(commentActions.delCommentDB(props.feed_Id, props.id));
   };
@@ -54,7 +52,7 @@ function CommentItem(props) {
               border="1px solid #bcbcbc"
               shape="circle"
               size="25"
-              src={props.user.userInfos[0].profileImg} // comment 렌더링할때 프로필 받아오기
+              src={props.user.userInfos[0].profileImg}
             />
             <Text bold textAlign="left" margin="5px 10px">
               {props.user.userId}

@@ -15,10 +15,7 @@ import Main from "../pages/Main";
 import PostDetail from "../pages/PostDetail";
 import Profile from "../pages/Profile";
 import ProfileEdit from "../pages/ProfileEdit";
-import Header from "../components/Header";
-import DelPop from "../components/DelPop";
 import PostUpdate from "../components/PostUpdate";
-import PostWrite from "../components/PostWrite";
 
 function App() {
   return (
