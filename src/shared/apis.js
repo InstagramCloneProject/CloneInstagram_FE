@@ -2,7 +2,7 @@ import axios from "axios";
 import { history } from "../redux/configureStore";
 
 const api = axios.create({
-  baseURL: "http://hyeonjun.shop/",
+  baseURL: "https://hyeonjun.shop/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -60,11 +60,8 @@ export const apis = {
   getDetail: (id) => api.get(`/api/feed/${id}`),
 
   // comment
-  addComment: (post_id, NewComment) =>
-    api.post("/api/comment", { postId: post_id, comment: NewComment }),
-  delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
-  editComment: (commentId, comment) =>
-    api.patch(`/api/comment/${commentId}`, { comment }),
+  add: (content, feed_Id) => api.post("/api/comment", { content, feed_Id }),
+  del: (commentId) => api.delete(`/api/comment/${commentId}`),
 
   // user
   login: (payload) => api.post("/api/user/login", payload),

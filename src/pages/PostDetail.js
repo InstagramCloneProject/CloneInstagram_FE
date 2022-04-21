@@ -17,6 +17,8 @@ import emojiIcon from "../assets/icons/emoji.png";
 
 import DelPop from "../components/DelPop";
 import Modal from "../elements/Modal";
+import CommentItem from "../components/CommentItem";
+import CommentWrite from "../components/CommentWrite";
 
 function PostDetail(props) {
   const dispatch = useDispatch();
@@ -31,9 +33,10 @@ function PostDetail(props) {
   }, []);
 
   //게시글 정보
-  const feedInfo = useSelector((state) => state.feed.feedInfo);
-  // const feedLikeCount = feedLikes.length;
+  const feedInfo = useSelector((state) => state.feed.feedInfo); //state.store.키값
   console.log(feedInfo);
+  // const feedLikeCount = feedLikes.length;
+  const comment_list = feedInfo?.comments;
 
   const [is_like, setIsLike] = React.useState(false);
   const changeLike = () => {
@@ -123,12 +126,12 @@ function PostDetail(props) {
                 {/* 본문내용 */}
                 <Grid
                   column="column"
-                  padding="10px 5px 0 4px"
+                  padding="0px 5px"
                   width="100%"
                   height="90%"
                 >
                   {/* 컨텐츠 부분  스크롤필요!!*/}
-                  <Grid width="100%" height="63%">
+                  <Grid width="100%" height="63%" overflow>
                     <Grid
                       column="column"
                       justifyContent="left"
@@ -164,29 +167,17 @@ function PostDetail(props) {
                     </Grid>
                     <Grid column="column" width="100%" height="35%">
                       {/* 댓글 */}
-                      <Grid column="column" width="100%" height="65%">
-                        <Grid
-                          display="flex"
-                          justifyContent="left"
-                          height="75%"
-                          width="100%"
-                        >
-                          <Image
-                            border="1px solid #bcbcbc"
-                            shape="circle"
-                            size="35"
-                            src={myProfileIcon} // comment 렌더링할때 프로필 받아오기
+
+                      {comment_list?.map((c, idx) => {
+                        return (
+                          <CommentItem
+                            {...c}
+                            idx={idx}
+                            key={idx}
+                            feed_Id={feedInfo.id}
                           />
-                          <Text bold textAlign="left" margin="10px">
-                            sparta111
-                          </Text>
-                        </Grid>
-                        <Grid height="20%">
-                          <Text textAlign="left" margin="0px 10px">
-                            CSS 너무 어려워!!!
-                          </Text>
-                        </Grid>
-                      </Grid>
+                        );
+                      })}
                     </Grid>
                   </Grid>
 
@@ -196,11 +187,17 @@ function PostDetail(props) {
                     height="40%"
                     position="fixed"
                     column="column"
+                    borderTop="1px solid #efefef"
                   >
                     {/* 댓글창 윗부분 */}
-                    <Grid is_flex height="80%" column="column">
+                    <Grid
+                      is_flex
+                      height="80%"
+                      column="column"
+                      borderTop="1px solid #efefef"
+                    >
                       {/* 이모티콘 줄 */}
-                      <Grid is_flex width="100%" height="30%" padding="0px 8px">
+                      <Grid is_flex width="100%" height="30%" padding="5px 8px">
                         <Grid is_flex width="38%">
                           {is_like ? (
                             <RiHeart3Fill
@@ -249,33 +246,9 @@ function PostDetail(props) {
                         </Text>
                       </Grid>
                     </Grid>
-                    <CommentBox>
-                      <Grid
-                        display="flex"
-                        width="80%"
-                        height="10%"
-                        padding="5px 0px 0px 8px"
-                      >
-                        <img
-                          src={emojiIcon}
-                          style={{
-                            cursor: "pointer",
-                            padding: "5px 0px",
-                          }}
-                          height={"40px"}
-                          alt="emoticon"
-                        />
-                        <Input border="none" placeholder="댓글 달기..."></Input>
-                      </Grid>
-                      <Text
-                        bold
-                        color="#0095F6"
-                        cursor="pointer"
-                        margin=" 15px auto"
-                      >
-                        게시
-                      </Text>
-                    </CommentBox>
+                    <Grid width="100%">
+                      <CommentWrite {...feedInfo} />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Wrap>

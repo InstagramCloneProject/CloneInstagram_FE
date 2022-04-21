@@ -3,12 +3,14 @@ import { Grid, Text, Input } from "../elements/index";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as commentActions } from "../redux/modules/comment";
+import { actionCreators as commentActions } from "../redux/modules/feed";
 
 import emojiIcon from "../assets/icons/emoji.png";
 
 //프롭스로 아이디 받아와야함
 function CommentWrite(props) {
+  // console.log(props);
+
   const { postId } = props;
   const dispatch = useDispatch();
 
@@ -23,7 +25,7 @@ function CommentWrite(props) {
       window.alert("댓글을 입력해주세요!");
       return;
     }
-    dispatch(commentActions.addCommentDB(comment, props.feedId));
+    dispatch(commentActions.addCommentDB(comment, props.id));
     setComment(""); //작성 누르면 인풋창 value 날리기
   };
 
@@ -49,6 +51,8 @@ function CommentWrite(props) {
             placeholder="댓글 달기..."
             _onChange={onChange}
             value={comment}
+            is_submit
+            onSubmit={write}
           ></Input>
         </Grid>
         <Text

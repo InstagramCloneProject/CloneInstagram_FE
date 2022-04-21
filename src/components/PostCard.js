@@ -12,9 +12,11 @@ import dmIcon from "../assets/icons/dm.png";
 import commentIcon from "../assets/icons/comment.png";
 import scrapIcon from "../assets/icons/scrap.png";
 import emojiIcon from "../assets/icons/emoji.png";
+import CommentWrite from "./CommentWrite";
 
 const PostCard = (props) => {
   const [is_like, setIsLike] = React.useState(false);
+  const [comment_like, setCommentLike] = React.useState(false);
   const comment_list = props.comments;
 
   const comments = comment_list.slice(0, 2); // 두개만 떼오기 확인필요
@@ -26,7 +28,9 @@ const PostCard = (props) => {
   const changeLike = () => {
     setIsLike(!is_like);
   };
-
+  const changeCLike = () => {
+    setCommentLike(!comment_like);
+  };
   //모달 상태관리
   const [modalOpen, setModalOpen] = React.useState(false);
   const [delOpen, setDelOpen] = React.useState(false);
@@ -73,14 +77,6 @@ const PostCard = (props) => {
             )}
           </Grid>
         </Grid>
-
-        {/* <More>
-          {props.nickname === localData ? (
-            <PostModal is_me={true} post_id={props._id} />
-          ) : (
-            <PostModal is_me={false} post_id={props._id} />
-          )}
-        </More> */}
       </UserBox>
 
       {/*  포스팅이미지  */}
@@ -165,38 +161,45 @@ const PostCard = (props) => {
         {/* 리스트중 2개만 뽑아오기 */}
         {comments?.map((c, idx) => {
           return (
-            <Grid Control="left" display="flex">
-              <Text bold>{c.user.userId}</Text>
-              <Text margin="0px 10px"> {c.content} </Text>
+            <Grid is_flex height="10%">
+              <Grid Control="left" display="flex">
+                <Text bold margin="5px 0px">
+                  {c.user.userId}
+                </Text>
+                <Text margin="5px 10px"> {c.content} </Text>
+              </Grid>
+
+              <Grid width="10%" padding="0 20px">
+                {/* 로직수정필요 */}
+                {props.comments[idx].comment_like ? (
+                  <RiHeart3Fill
+                    style={{ cursor: "pointer" }}
+                    size="15"
+                    color="#ed4a57"
+                    onClick={changeCLike}
+                  />
+                ) : (
+                  <RiHeart3Line
+                    style={{ cursor: "pointer" }}
+                    size="15"
+                    onClick={changeCLike}
+                  />
+                )}
+              </Grid>
             </Grid>
           );
         })}
       </Grid>
 
       {/* 작성시간 */}
-      <Grid padding="5px 16px 16px 18px">
+      <Grid padding="15px 16px 0px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
           {props.createdAt}
         </Text>
       </Grid>
 
       {/* 댓글 작성 */}
-      <CommentBox>
-        <Grid is_flex>
-          <img
-            src={emojiIcon}
-            style={{ cursor: "pointer", margin: "7px 16px 8px 0" }}
-            height={"30px"}
-            alt="emoticon"
-          />
-          <Grid width="300px">
-            <Input border="none" placeholder="댓글 달기..."></Input>
-          </Grid>
-          <Text bold color="#0095F6" cursor="pointer" margin="10px 0px">
-            게시
-          </Text>
-        </Grid>
-      </CommentBox>
+      <CommentWrite {...props} />
     </Grid>
   );
 };

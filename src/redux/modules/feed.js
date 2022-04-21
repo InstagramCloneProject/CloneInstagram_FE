@@ -10,14 +10,26 @@ const EDIT_FEED = "EDIT_FEED";
 const DEL_FEED = " DEL_FEED";
 const GET_DETAIL = "GET_DETAIL";
 
+const ADD_COMMENT = "comment/ADD";
+const DELETE_COMMENT = "comment/DELETE";
+
 // action creator
 const setFeed = createAction(SET_FEED, (feed_list) => feed_list); //중괄호 여부 체크 필요!
 const getDetail = createAction(GET_DETAIL, (FeedInfo) => FeedInfo);
-// const addFeed = createAction(ADD_FEED, (feed) => ({ feed }));
 const delFeed = createAction(DEL_FEED, (feedId) => ({ feedId }));
 const editFeed = createAction(EDIT_FEED, (feedId, content) => ({
   feedId,
   content,
+}));
+
+//댓글
+const addComment = createAction(ADD_COMMENT, (feed_Id, comment) => ({
+  feed_Id,
+  comment,
+}));
+const delComment = createAction(DELETE_COMMENT, (feed_Id, commentId) => ({
+  feed_Id,
+  commentId,
 }));
 
 // initialState
@@ -52,9 +64,10 @@ const getFeedDB = () => {
 
 const getDetailDB = (feedId) => {
   return async function (dispatch, getState) {
+    console.log("상세정보 통신 시작");
     try {
       const { data } = await apis.getDetail(feedId);
-
+      console.log(data);
       dispatch(getDetail(data.Feed)); //리덕스에 넘길 상세정보 재정비 할 필요 있나 확인필요
     } catch (err) {
       window.alert("상세정보 불러오기 실패");
@@ -139,10 +152,52 @@ const delFeedDB = (feedId) => {
       console.log(feed_index);
 
       dispatch(delFeed(feedId));
-      history.goBack();
+      window.location.reload();
     } catch (err) {
       console.log(err);
       window.alert("삭제실패! 다시 시도해주세요.");
+    }
+  };
+};
+
+//댓글
+
+const addCommentDB = (content, feed_Id) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("댓글추가한다!", content, feed_Id);
+    try {
+      const { data } = await apis.add(content, feed_Id);
+      console.log(data);
+
+      const user_Id = localStorage.getItem("userId");
+      const comment = {
+        id: data.id,
+        user_Id: user_Id,
+        content: content,
+        createdAt: data.createdAt,
+      };
+      dispatch(getFeedDB);
+      dispatch(getDetailDB(feed_Id));
+      dispatch(addComment(feed_Id, comment));
+    } catch (err) {
+      console.log(err);
+      window.alert("댓글 추가 실패, 다시 시도해 주세요.");
+    }
+  };
+};
+
+const delCommentDB = (feed_Id, commentId) => {
+  return async function (dispatch, getState, { history }) {
+    console.log("댓글삭제 통신 시도", commentId);
+    try {
+      const { data } = await apis.del(commentId);
+      console.log(data);
+
+      dispatch(getDetailDB(feed_Id));
+      dispatch(delComment(feed_Id, commentId));
+    } catch (err) {
+      console.log(err);
+      window.alert("댓글 삭제 실패, 다시 시도해 주세요.");
     }
   };
 };
@@ -158,11 +213,6 @@ export default handleActions(
     [GET_DETAIL]: (state, action) =>
       produce(state, (draft) => {
         draft.feedInfo = action.payload[0];
-      }),
-    [ADD_FEED]: (state, action) =>
-      produce(state, (draft) => {
-        console.log("리듀서 추가로 넘어왔어.");
-        draft.list.unshift(action.payload);
       }),
     [DEL_FEED]: (state, action) =>
       produce(state, (draft) => {
@@ -182,6 +232,33 @@ export default handleActions(
 
         console.log(draft.list[idx]);
       }),
+
+    [ADD_COMMENT]: (state, action) =>
+      produce(state, (draft) => {
+        console.log("리듀서 페이로드보자", action.payload);
+        let idx = draft.list.findIndex((f) => {
+          return parseInt(f.id) === parseInt(action.payload.feed_Id);
+        });
+        console.log("스테이트 인덱스 확인", state.list[idx]);
+        console.log(idx);
+
+        draft.list[idx].comments.push(action.payload.comment);
+      }),
+    [DELETE_COMMENT]: (state, action) =>
+      produce(state, (draft) => {
+        console.log("리듀서 삭제 페이로드", action.payload);
+
+        let idx = draft.list.findIndex((f) => {
+          return parseInt(f.id) === parseInt(action.payload.feed_Id);
+        });
+        console.log("인덱스확인", idx);
+
+        const new_comment_list = draft.list[idx].comments.filter((c) => {
+          return parseInt(action.payload.commentId) !== c.id;
+        });
+        console.log(new_comment_list);
+        draft.list[idx].comments = new_comment_list;
+      }),
   },
   initialState
 );
@@ -192,6 +269,10 @@ const actionCreators = {
   getDetailDB,
   delFeedDB,
   editFeedDB,
+  addComment,
+  delComment,
+  addCommentDB,
+  delCommentDB,
 };
 
 export { actionCreators };
