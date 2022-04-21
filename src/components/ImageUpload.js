@@ -1,8 +1,8 @@
 import React from "react";
+import { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useRef } from "react";
 import { actionCreators as imageActions } from "../redux/modules/image";
 
 // import elements

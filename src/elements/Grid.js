@@ -155,6 +155,9 @@ const GridBox = styled.div`
   ${(props) => (props.left ? `left: ${props.left};` : "")}
   ${(props) => (props.hover ? `&:hover:{${props.hover}} ;` : "")}
   cursor: ${(props) => props.cursor};
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default Grid;

@@ -18,6 +18,7 @@ import ProfileEdit from "../pages/ProfileEdit";
 import Header from "../components/Header";
 import DelPop from "../components/DelPop";
 import PostUpdate from "../components/PostUpdate";
+import PostWrite from "../components/PostWrite";
 
 function App() {
   return (
@@ -27,7 +28,6 @@ function App() {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Login}></Route>
-          <Route path="/delpop" exact component={DelPop}></Route>
           <Route path="/signup" exact component={Signup}></Route>
           <Route path="/main" exact component={Main}></Route>
           <Route
@@ -35,6 +35,7 @@ function App() {
             exact
             component={PostDetail}
           ></Route>
+          <Route path="/feed/:feedId" exact component={PostUpdate}></Route>
           <Route path="/profile/:userId" exact component={Profile}></Route>
           <Route path="/profileEdit" exact component={ProfileEdit}></Route>
         </Switch>

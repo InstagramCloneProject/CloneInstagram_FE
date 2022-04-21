@@ -7,8 +7,9 @@ import myProfileIcon from "../assets/icons/myprofile.png";
 
 const Aside = (props) => {
   const userId = localStorage.getItem("userId");
+  const profileImg = localStorage.getItem("profileImgUrl");
   return (
-    <Grid width="400px" bg="#fafafa" padding="0px 25px">
+    <Grid width="400px" height="100%" bg="#fafafa" padding="20px 25px">
       <Grid width="100%">
         <Grid is_flex width="auto">
           <Grid is_flex width="auto">
@@ -16,7 +17,7 @@ const Aside = (props) => {
               border="1px solid #bcbcbc"
               shape="circle"
               size="60"
-              src={myProfileIcon} //프로필 url 받아오기
+              src={profileImg} //프로필 url 받아오기
               cursor="poiner"
             />
             <Text margin="0px 10px" bold>
@@ -39,7 +40,7 @@ const Aside = (props) => {
           <Text
             textAlign="left"
             color="#8e8e8e"
-            size="15px"
+            size="14px"
             bold
             margin="20px 0px 0px 0px"
           >
