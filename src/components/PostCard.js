@@ -161,7 +161,7 @@ const PostCard = (props) => {
         {/* 리스트중 2개만 뽑아오기 */}
         {comments?.map((c, idx) => {
           return (
-            <Grid is_flex height="10%">
+            <Grid is_flex height="10%" key={idx}>
               <Grid Control="left" display="flex">
                 <Text bold margin="5px 0px">
                   {c.user.userId}
@@ -239,7 +239,6 @@ const Icon = styled.img`
   height: 24px;
   margin-left: 20px;
   cursor: pointer;
-  onClick
 `;
 
 const Ellipsis = styled.div`

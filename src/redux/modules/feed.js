@@ -166,7 +166,7 @@ const addCommentDB = (content, feed_Id) => {
   return async function (dispatch, getState, { history }) {
     console.log("댓글추가한다!", content, feed_Id);
     try {
-      const { data } = await apis.add(content, feed_Id);
+      const { data } = await apis.addComment(content, feed_Id);
       console.log(data);
 
       const user_Id = localStorage.getItem("userId");
@@ -190,7 +190,7 @@ const delCommentDB = (feed_Id, commentId) => {
   return async function (dispatch, getState, { history }) {
     console.log("댓글삭제 통신 시도", commentId);
     try {
-      const { data } = await apis.del(commentId);
+      const { data } = await apis.delComment(commentId);
       console.log(data);
 
       dispatch(getDetailDB(feed_Id));

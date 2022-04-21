@@ -60,8 +60,9 @@ export const apis = {
   getDetail: (id) => api.get(`/api/feed/${id}`),
 
   // comment
-  add: (content, feed_Id) => api.post("/api/comment", { content, feed_Id }),
-  del: (commentId) => api.delete(`/api/comment/${commentId}`),
+  addComment: (content, feed_Id) =>
+    api.post("/api/comment", { content, feed_Id }),
+  delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
 
   // user
   login: (payload) => api.post("/api/user/login", payload),
