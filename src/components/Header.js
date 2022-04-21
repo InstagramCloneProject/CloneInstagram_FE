@@ -15,6 +15,8 @@ import logoIcon from "../assets/icons/literal_logo.png";
 const Header = (props) => {
   const { children } = props;
 
+  const __userID = localStorage.getItem("user_Id");
+
   const [modalOpen, setModalOpen] = React.useState(false);
 
   const openModal = () => {
@@ -48,7 +50,7 @@ const Header = (props) => {
             <Btn
               src={homeIcon}
               onClick={() => {
-                history.push("/main");
+                history.push("/");
               }}
             />
             <Btn
@@ -68,7 +70,7 @@ const Header = (props) => {
               size="24"
               paddingLeft="20px"
               _onClick={() => {
-                history.push("/profile");
+                history.push(`/profile/${__userID}`);
               }}
               cursor="pointer"
             ></Image>

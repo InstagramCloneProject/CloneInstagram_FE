@@ -2,7 +2,7 @@ import axios from "axios";
 import { history } from "../redux/configureStore";
 
 const api = axios.create({
-  //   baseURL: "변경필요",
+  baseURL: "https://hyeonjun.shop/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -14,8 +14,8 @@ api.interceptors.request.use(function (config) {
   const atoken = localStorage.getItem("access_token");
   const rtoken = localStorage.getItem("refresh_token");
 
-  config.headers.common["Authorization"] = `Bearer ${atoken}`;
-  config.headers.common["rAuthorization"] = `Bearer ${rtoken}`;
+  config.headers.common["authorization"] = `Bearer ${atoken}`;
+  config.headers.common["reauthorization"] = `Bearer ${rtoken}`;
 
   return config;
 });
@@ -52,21 +52,26 @@ api.interceptors.response.use(
 );
 
 export const apis = {
-  // post
+  // feed
+  get: () => api.get("/api/feed"),
   add: (content) => api.post("/api/feed", content),
-  edit: (id, contents) => api.patch(`/api/feed/${id}`, contents),
-  delete: (Id) => api.delete(`/api/feed/${Id}`),
-  getDetail: (Id) => api.get(`/api/feed/${Id}`),
+  edit: (id, content) => api.patch(`/api/feed/${id}`, content),
+  delete: (id) => api.delete(`/api/feed/${id}`),
+  getDetail: (id) => api.get(`/api/feed/${id}`),
 
   // comment
-  addComment: (post_id, NewComment) =>
-    api.post("/api/comment", { postId: post_id, comment: NewComment }),
-  delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
-  editComment: (commentId, comment) =>
-    api.patch(`/api/comment/${commentId}`, { comment }),
+  add: (content, feed_Id) => api.post("/api/comment", { content, feed_Id }),
+  del: (commentId) => api.delete(`/api/comment/${commentId}`),
 
   // user
   login: (payload) => api.post("/api/user/login", payload),
   join: (payload) => api.post("/api/user/join", payload),
+  getUser: (payload) => api.get(`/api/user/${payload}`),
+  editProfileImg: (formData, __userId) =>
+    api.patch(`/api/user/${__userId}/profileImg`, formData),
+  follow_user: (__userId_storage, __profile_userId) =>
+    api.post(`/api/user/${__userId_storage}/follow`, {
+      followId: __profile_userId,
+    }),
   // userinfo: () => api.get(`/userinfo`),
 };

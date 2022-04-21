@@ -28,6 +28,7 @@ const Input = (props) => {
     _style,
     color,
     placeholder_st,
+    defaultValue,
   } = props;
 
   //추가
@@ -61,6 +62,7 @@ const Input = (props) => {
           value={value ? value : ""}
           placeholder={placeholder}
           onChange={_onChange}
+          defaultValue={defaultValue}
           // margin={margin} //style에 넣었으니 안써도 되나?
         />
       </Grid>
@@ -91,17 +93,19 @@ const Input = (props) => {
               }
             }}
             style={_style}
+            defaultValue={defaultValue ? defaultValue : ""}
           />
         ) : (
           //ElInput 프롭스 변경
           <ElInput
-            alue={value ? value : ""}
+            value={value ? value : ""}
             {...style}
             ref={_ref}
             type={type}
             placeholder={placeholder}
             onChange={_onChange}
             style={_style}
+            defaultValue={defaultValue}
           />
         )}
       </Grid>
