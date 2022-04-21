@@ -19,6 +19,8 @@ const Main = (props) => {
   }, []);
 
   const feed_list = useSelector((state) => state.feed.list); //feed 관련 정보만 담음
+  const unfollow_list = useSelector((state) => state.feed.unfollow_list);
+  console.log(unfollow_list);
 
   return (
     <MainBox>
@@ -32,7 +34,7 @@ const Main = (props) => {
           {/* <PostCard /> */}
         </PostBox>
         <AsideBox>
-          <Follower />
+          <Follower unfollow_list={unfollow_list} />
         </AsideBox>
       </Grid>
     </MainBox>

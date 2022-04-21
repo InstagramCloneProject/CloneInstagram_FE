@@ -9,24 +9,22 @@ import { actionCreators as commentActions } from "../redux/modules/feed";
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
 import DelPop from "./DelPop";
 
-import myProfileIcon from "../assets/icons/myprofile.png";
 import moreIcon from "../assets/icons/more.png";
 import dmIcon from "../assets/icons/dm.png";
 import commentIcon from "../assets/icons/comment.png";
 import scrapIcon from "../assets/icons/scrap.png";
-import emojiIcon from "../assets/icons/emoji.png";
 import CommentWrite from "./CommentWrite";
 import { useDispatch } from "react-redux";
+import TimeCounting from "time-counting";
 
 const PostCard = (props) => {
   console.log(props.comments);
-  const like_list = props.feedLikes;
 
   const dispatch = useDispatch();
   const userId = localStorage.getItem("userId");
 
   const comment_list = props.comments;
-  const comments = comment_list.slice(0, 2); // 두개만 떼오기 확인필요
+  const comments = comment_list.slice(0, 2);
 
   const commentCount = comment_list.length;
   const feedLikeCount = props.feedLikes.length;
@@ -57,6 +55,12 @@ const PostCard = (props) => {
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  // 작성시간
+  const option = {
+    lang: "ko",
+  };
+  const createdAt = TimeCounting(props.createdAt, option);
 
   return (
     <Grid
@@ -171,10 +175,10 @@ const PostCard = (props) => {
             history.push(`/postDetail/${props.feedId}`);
           }}
         >
-          {/* 프롭스에서 넘겨받은 데이터 */}
           "댓글 {commentCount}개 모두보기"
         </Text>
-        {/* 리스트중 2개만 뽑아오기 */}
+
+        {/* 댓글 목록 */}
         {comments?.map((c, idx) => {
           console.log(c);
           return (
@@ -226,7 +230,7 @@ const PostCard = (props) => {
       {/* 작성시간 */}
       <Grid padding="15px 16px 0px 18px">
         <Text color="#8e8e8e" size="10px" textAlign="left">
-          {props.createdAt}
+          {createdAt}
         </Text>
       </Grid>
 

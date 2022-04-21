@@ -4,10 +4,16 @@ import { Button, Grid, Image, Text } from "../elements/index";
 import { history } from "../redux/configureStore";
 
 import myProfileIcon from "../assets/icons/myprofile.png";
+import { useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/user";
 
 const Aside = (props) => {
+  const dispatch = useDispatch();
+  const N_userId = parseInt(localStorage.getItem("user_Id"));
   const userId = localStorage.getItem("userId");
   const profileImg = localStorage.getItem("profileImgUrl");
+  const follower_list = props.unfollow_list;
+
   return (
     <Grid width="400px" height="100%" bg="#fafafa" padding="20px 25px">
       <Grid width="100%">
@@ -49,26 +55,37 @@ const Aside = (props) => {
         </Grid>
 
         {/* 다른 유저 네임택 */}
-        <Grid is_flex>
-          <Grid is_flex width="auto">
-            <Image shape="circle" size="35" />
-            <Text margin="0px 10px" bold>
-              sparta
-            </Text>
-          </Grid>
-          <Grid>
-            <Text
-              textAlign="right"
-              width="100px"
-              bold
-              color="#0095F6"
-              cursor="pointer"
-              margin="5px 0px"
-            >
-              팔로우
-            </Text>
-          </Grid>
-        </Grid>
+        {follower_list.map((f, idx) => {
+          return (
+            <Grid is_flex key={idx}>
+              <Grid is_flex width="auto">
+                <Image
+                  src={f.userInfos[0].profileImg}
+                  shape="circle"
+                  size="35"
+                />
+                <Text margin="0px 10px" bold>
+                  {f.userId}
+                </Text>
+              </Grid>
+              <Grid>
+                <Text
+                  textAlign="right"
+                  width="100px"
+                  bold
+                  color="#0095F6"
+                  cursor="pointer"
+                  margin="5px 0px"
+                  _onClick={() => {
+                    dispatch(userActions.__follow(N_userId, f.userId));
+                  }}
+                >
+                  팔로우
+                </Text>
+              </Grid>
+            </Grid>
+          );
+        })}
 
         {/* elements 스타일 공통 적용은 어떤식으로 하나? */}
         <Grid padding="50px 5px">

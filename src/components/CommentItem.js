@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as commentActions } from "../redux/modules/feed";
 
 import moreIcon from "../assets/icons/more.png";
+import TimeCounting from "time-counting";
 
 function CommentItem(props) {
   console.log("댓글 프롭스", props);
@@ -32,6 +33,12 @@ function CommentItem(props) {
       commentActions.commentUnlikeDB(props.feed_Id, props.id, setCommentLike)
     );
   };
+
+  //작성시간
+  const option = {
+    lang: "ko",
+  };
+  const createdAt = TimeCounting(props.createdAt, option);
 
   return (
     <div>
@@ -75,7 +82,7 @@ function CommentItem(props) {
         </Text>
         <Grid padding="5px 16px 0px 10px" display="flex" Control="left">
           <Text color="#8e8e8e" size="10px" textAlign="left" margin="0px 15px">
-            {props.createdAt}
+            {createdAt}
           </Text>
           {props.user.userId === userId ? (
             <RiDeleteBin5Line

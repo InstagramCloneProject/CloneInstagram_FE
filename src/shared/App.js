@@ -23,8 +23,6 @@ import PostWrite from "../components/PostWrite";
 function App() {
   return (
     <div className="App">
-      <Header />
-
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" exact component={Login}></Route>

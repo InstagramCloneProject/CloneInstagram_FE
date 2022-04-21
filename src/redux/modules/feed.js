@@ -14,7 +14,10 @@ const ADD_COMMENT = "comment/ADD";
 const DELETE_COMMENT = "comment/DELETE";
 
 // action creator
-const setFeed = createAction(SET_FEED, (feed_list) => feed_list); //중괄호 여부 체크 필요!
+const setFeed = createAction(SET_FEED, (feed_list, unfollow_list) => ({
+  feed_list,
+  unfollow_list,
+})); //중괄호 여부 체크 필요!
 const getDetail = createAction(GET_DETAIL, (FeedInfo) => FeedInfo);
 const delFeed = createAction(DEL_FEED, (feedId) => ({ feedId }));
 const editFeed = createAction(EDIT_FEED, (feedId, content) => ({
@@ -34,8 +37,9 @@ const delComment = createAction(DELETE_COMMENT, (feed_Id, commentId) => ({
 
 // initialState
 const initialState = {
-  feedInfo: null,
+  feedInfo: [],
   list: [],
+  unfollow_list: [],
   follow_list: [],
 };
 
@@ -55,7 +59,8 @@ const getFeedDB = () => {
       const { data } = await apis.get();
       console.log(data);
       const feed_list = data.feedList;
-      dispatch(setFeed(feed_list));
+      const unfollow_list = data.unfollowList;
+      dispatch(setFeed(feed_list, unfollow_list));
     } catch {
       alert("데이터를 불러오지 못했습니다.");
     }
@@ -63,12 +68,13 @@ const getFeedDB = () => {
 };
 
 const getDetailDB = (feedId) => {
-  return async function (dispatch, getState) {
+  return async function (dispatch, getState, { history }) {
     console.log("상세정보 통신 시작");
     try {
       const { data } = await apis.getDetail(feedId);
       console.log("상세정보 DB", data);
       dispatch(getDetail(data.Feed)); //리덕스에 넘길 상세정보 재정비 할 필요 있나 확인필요
+      history.replace(`/postDetail/${feedId}`);
     } catch (err) {
       window.alert("상세정보 불러오기 실패");
       console.log(err);
@@ -160,7 +166,7 @@ const addCommentDB = (content, feed_Id) => {
         content: content,
         createdAt: data.createdAt,
       };
-      dispatch(getFeedDB);
+      dispatch(getFeedDB());
       dispatch(getDetailDB(feed_Id));
       dispatch(addComment(feed_Id, comment));
     } catch (err) {
@@ -265,8 +271,9 @@ export default handleActions(
   {
     [SET_FEED]: (state, action) =>
       produce(state, (draft) => {
-        // console.log("리듀서 피드 불러온다", action.payload);
-        draft.list = action.payload;
+        console.log("리듀서 피드 불러온다", action.payload);
+        draft.list = action.payload.feed_list;
+        draft.unfollow_list = action.payload.unfollow_list;
       }),
     [GET_DETAIL]: (state, action) =>
       produce(state, (draft) => {
