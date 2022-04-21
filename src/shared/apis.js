@@ -67,8 +67,7 @@ export const apis = {
   delComment: (commentId) => api.delete(`/api/comment/${commentId}`),
   commentLike: (commentId, likeId) =>
     api.post(`/api/comment/${commentId}/likes`, { likeId }),
-  commentUnlike: (commentId, userId) =>
-    api.delete(`/api/comment/${commentId}/likes`),
+  commentUnlike: (commentId) => api.delete(`/api/comment/${commentId}/unlikes`),
 
   // user
   login: (payload) => api.post("/api/user/login", payload),

@@ -34,14 +34,9 @@ function PostDetail(props) {
 
   //게시글 정보
   const feedInfo = useSelector((state) => state.feed.feedInfo); //state.store.키값
-  console.log(feedInfo);
-  // const feedLikeCount = feedLikes.length;
   const comment_list = feedInfo?.comments;
-
-  const [is_like, setIsLike] = React.useState(false);
-  const changeLike = () => {
-    setIsLike(!is_like);
-  };
+  const userId = localStorage.getItem("userId");
+  const feedLikeCount = feedInfo?.feedLikes?.length;
 
   //모달 상태관리
   const [modalOpen, setModalOpen] = React.useState(true);
@@ -64,6 +59,20 @@ function PostDetail(props) {
   const closeDel = () => {
     setModalOpen(false);
     setDelOpen(false);
+  };
+
+  //피드좋아요
+  const changeLike = () => {
+    setIsLike(!is_like);
+  };
+  const [is_like, setIsLike] = React.useState("");
+
+  const feedLike = () => {
+    dispatch(feedActions.feedLikeDB(feedInfo.id, setIsLike));
+  };
+
+  const feedUnlike = () => {
+    dispatch(feedActions.feedUnlikeDB(feedInfo.id, setIsLike));
   };
 
   return (
@@ -199,7 +208,8 @@ function PostDetail(props) {
                       {/* 이모티콘 줄 */}
                       <Grid is_flex width="100%" height="30%" padding="5px 8px">
                         <Grid is_flex width="38%">
-                          {is_like ? (
+                          {feedInfo?.feedLikes[0]?.likeId === userId ||
+                          is_like ? (
                             <RiHeart3Fill
                               style={{
                                 cursor: "pointer",
@@ -207,7 +217,7 @@ function PostDetail(props) {
                               }}
                               size="28"
                               color="#ed4a57"
-                              onClick={changeLike}
+                              onClick={feedUnlike}
                             />
                           ) : (
                             <RiHeart3Line
@@ -216,7 +226,7 @@ function PostDetail(props) {
                                 margin: "0px 10px 0px 0px",
                               }}
                               size="28"
-                              onClick={changeLike}
+                              onClick={feedLike}
                             />
                           )}
                           <Icon
@@ -234,7 +244,7 @@ function PostDetail(props) {
                       </Grid>
                       <Grid padding="10px 8px">
                         <Text bold textAlign="left" margin="0">
-                          좋아요 0개
+                          좋아요 {feedLikeCount}개
                         </Text>
                         <Text
                           color="#8e8e8e"

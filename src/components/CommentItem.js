@@ -10,13 +10,27 @@ import { actionCreators as commentActions } from "../redux/modules/feed";
 import moreIcon from "../assets/icons/more.png";
 
 function CommentItem(props) {
-  console.log("댓글에서 피드아이디 프롭스 있나?", props.feed_Id);
+  console.log("댓글 프롭스", props);
   const dispatch = useDispatch();
-  // 좋아요 요청 함수
-  // 좋아요 취소 함수
   // const ComLikeCount = props.comments[props.idx].commentLikes.length; // 확인필요
   const delcomment = () => {
     dispatch(commentActions.delCommentDB(props.feed_Id, props.id));
+  };
+
+  //댓글 좋아요
+  const userId = localStorage.getItem("userId");
+  const [comment_like, setCommentLike] = React.useState(false);
+
+  const commentLike = () => {
+    dispatch(
+      commentActions.commentLikeDB(props.feed_Id, props.id, setCommentLike)
+    );
+  };
+
+  const commentUnlike = () => {
+    dispatch(
+      commentActions.commentUnlikeDB(props.feed_Id, props.id, setCommentLike)
+    );
   };
 
   return (
@@ -40,18 +54,18 @@ function CommentItem(props) {
             </Text>
           </Grid>
           <Grid width="5%" padding="0px 0px">
-            {props.commentLikes.length > 0 ? (
+            {props.commentLikes[0]?.likeId === userId || comment_like ? (
               <RiHeart3Fill
                 style={{ cursor: "pointer" }}
                 size="15"
                 color="#ed4a57"
-                // onClick={좋아요 취소}
+                onClick={commentUnlike}
               />
             ) : (
               <RiHeart3Line
                 style={{ cursor: "pointer" }}
                 size="15"
-                // onClick={좋아요}
+                onClick={commentLike}
               />
             )}
           </Grid>
@@ -63,11 +77,15 @@ function CommentItem(props) {
           <Text color="#8e8e8e" size="10px" textAlign="left" margin="0px 15px">
             {props.createdAt}
           </Text>
-          <RiDeleteBin5Line
-            size="13"
-            onClick={delcomment}
-            style={{ cursor: "pointer" }}
-          />
+          {props.user.userId === userId ? (
+            <RiDeleteBin5Line
+              size="13"
+              onClick={delcomment}
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            ""
+          )}
         </Grid>
       </Grid>
     </div>

@@ -4,6 +4,7 @@ import { Button, Grid, Image, Text, Input, Modal } from "../elements/index";
 
 import { history } from "../redux/configureStore";
 import { actionCreators as feedActions } from "../redux/modules/feed";
+import { actionCreators as commentActions } from "../redux/modules/feed";
 
 import { RiHeart3Line, RiHeart3Fill } from "react-icons/ri";
 import DelPop from "./DelPop";
@@ -18,8 +19,8 @@ import CommentWrite from "./CommentWrite";
 import { useDispatch } from "react-redux";
 
 const PostCard = (props) => {
+  console.log(props.comments);
   const like_list = props.feedLikes;
-  console.log(like_list);
 
   const dispatch = useDispatch();
   const userId = localStorage.getItem("userId");
@@ -31,15 +32,8 @@ const PostCard = (props) => {
   const feedLikeCount = props.feedLikes.length;
 
   //피드좋아요
-  const changeLike = () => {
-    setIsLike(!is_like);
-  };
-  const changeCLike = () => {
-    setCommentLike(!comment_like);
-  };
 
-  const [is_like, setIsLike] = React.useState(false);
-  const [comment_like, setCommentLike] = React.useState(false);
+  const [is_like, setIsLike] = React.useState("");
 
   const feedLike = () => {
     dispatch(feedActions.feedLikeDB(props.id, setIsLike));
@@ -49,24 +43,17 @@ const PostCard = (props) => {
     dispatch(feedActions.feedUnlikeDB(props.id, setIsLike));
   };
 
-  const likeCheck = () => {
-    if (props.feedLikes[0]?.likeId === userId) {
-      setIsLike(true);
-    } else {
-      setIsLike(false);
-    }
-  };
+  //댓글 좋아요
+  const [comment_like, setCommentLike] = React.useState("");
 
-  //모달 상태관리
+  //모달
   const [modalOpen, setModalOpen] = React.useState(false);
   const [delOpen, setDelOpen] = React.useState(false);
 
-  //열기
   const openModal = () => {
     setModalOpen(true);
   };
 
-  //닫기
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -93,15 +80,18 @@ const PostCard = (props) => {
               {props.user.userId}
             </Text>
           </Grid>
-          <Grid width="10%" margin="0px 15px">
-            <Icon src={moreIcon} alt="see more" onClick={openModal} />
-            {modalOpen && (
-              <Modal closeModal={closeModal} feedId={props.id}>
-                <DelPop closeModal={closeModal} {...props} />
-                {/* 피드아이디 넘겨주기위해 delPop으로 props 넘기기 되는지 확인..! */}
-              </Modal>
-            )}
-          </Grid>
+          {props.user.userId === userId ? (
+            <Grid width="10%" margin="0px 15px">
+              <Icon src={moreIcon} alt="see more" onClick={openModal} />
+              {modalOpen && (
+                <Modal closeModal={closeModal} feedId={props.id}>
+                  <DelPop closeModal={closeModal} {...props} />
+                </Modal>
+              )}
+            </Grid>
+          ) : (
+            ""
+          )}
         </Grid>
       </UserBox>
 
@@ -186,6 +176,7 @@ const PostCard = (props) => {
         </Text>
         {/* 리스트중 2개만 뽑아오기 */}
         {comments?.map((c, idx) => {
+          console.log(c);
           return (
             <Grid is_flex height="10%" key={idx}>
               <Grid Control="left" display="flex">
@@ -196,19 +187,34 @@ const PostCard = (props) => {
               </Grid>
 
               <Grid width="10%" padding="0 20px">
-                {/* 로직수정필요 */}
-                {props.comments[idx].comment_like ? (
+                {c.commentLikes?.likeId === userId || comment_like ? (
                   <RiHeart3Fill
                     style={{ cursor: "pointer" }}
                     size="15"
                     color="#ed4a57"
-                    onClick={changeCLike}
+                    onClick={() => {
+                      dispatch(
+                        commentActions.commentUnlikeDB(
+                          props.id,
+                          c.id,
+                          setCommentLike
+                        )
+                      );
+                    }}
                   />
                 ) : (
                   <RiHeart3Line
                     style={{ cursor: "pointer" }}
                     size="15"
-                    onClick={changeCLike}
+                    onClick={() => {
+                      dispatch(
+                        commentActions.commentLikeDB(
+                          props.id,
+                          c.id,
+                          setCommentLike
+                        )
+                      );
+                    }}
                   />
                 )}
               </Grid>

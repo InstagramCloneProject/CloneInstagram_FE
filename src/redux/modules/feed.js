@@ -79,8 +79,6 @@ const getDetailDB = (feedId) => {
 const addFeedDB = (file, content) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // console.log("image:", file);
-      // console.log("content:", content);
       console.log("등록정보 모듈에 넘어갔어");
 
       const formData = new FormData();
@@ -90,20 +88,6 @@ const addFeedDB = (file, content) => {
       const { data } = await apis.add(formData);
       console.log("등록후 서버에서 받는 정보", data);
 
-      // const img_url = getState((state) => state.image.preview);
-      // const userId = localStorage.getItem("userId");
-      // const profileImg = localStorage.getItem("profileImgUrl");
-      // // 유저네임/유저이미지/컨텐츠이미지/컨텐츠/작성시간
-      // const feed = {
-      //   comments: [],
-      //   feedLikes: [],
-      //   user: { userId: userId },
-      //   profileImg: profileImg,
-      //   id: data.id,
-      //   feedImg: img_url,
-      //   content: content,
-      //   createdAt: data.createdAt,
-      // };
       dispatch(getFeedDB());
       history.replace("/main");
     } catch (err) {
@@ -211,6 +195,7 @@ const feedLikeDB = (feed_Id, setIsLike) => {
       const userId = localStorage.getItem("userId");
       const { data } = await apis.like(feed_Id, userId);
       console.log("좋아요 db 응답", data);
+      dispatch(getFeedDB());
       setIsLike(true);
       dispatch(getDetailDB(feed_Id));
     } catch (err) {
@@ -220,15 +205,16 @@ const feedLikeDB = (feed_Id, setIsLike) => {
   };
 };
 
-const feedUnlikeDB = (feedId, setIsLike) => {
+const feedUnlikeDB = (feed_Id, setIsLike) => {
   return async function (dispatch, getState, { history }) {
-    console.log("좋아요취소 통신 시도", feedId);
+    console.log("좋아요취소 통신 시도", feed_Id);
     try {
       const userId = localStorage.getItem("userId");
-      const { data } = await apis.unLike(feedId);
+      const { data } = await apis.unLike(feed_Id);
       console.log("좋아요취소 db 응답", data);
       setIsLike(false);
-      dispatch(getDetailDB(feedId));
+      dispatch(getFeedDB());
+      dispatch(getDetailDB(feed_Id));
     } catch (err) {
       console.log(err);
       window.alert("좋아요 취소 실패");
@@ -238,32 +224,38 @@ const feedUnlikeDB = (feedId, setIsLike) => {
 
 //댓글 좋아요
 
-const commentLikeDB = (commentId) => {
+const commentLikeDB = (feed_Id, commentId, setCommentLike) => {
   return async function (dispatch, getState, { history }) {
-    console.log("좋아요 통신 시도", commentId);
+    console.log("댓좋 통신 시도", commentId);
     try {
       const userId = localStorage.getItem("userId");
-      await apis.commentLike(commentId, userId);
+      const { data } = await apis.commentLike(commentId, userId);
+      console.log("댓좋 DB", data);
 
-      dispatch(getDetailDB(commentId));
+      dispatch(getFeedDB());
+      setCommentLike(true);
+      dispatch(getDetailDB(feed_Id));
     } catch (err) {
       console.log(err);
-      window.alert("댓글 삭제 실패, 다시 시도해 주세요.");
+      window.alert("댓글 좋아요 실패!");
     }
   };
 };
 
-const commentUnlikeDB = (commentId) => {
+const commentUnlikeDB = (feed_Id, commentId, setCommentLike) => {
   return async function (dispatch, getState, { history }) {
-    console.log("좋아요취소 통신 시도", commentId);
+    console.log("댓좋취 통신 시도", feed_Id, commentId);
     try {
       const userId = localStorage.getItem("userId");
-      await apis.commentUnlike(commentId, userId);
+      const { data } = await apis.commentUnlike(commentId);
+      console.log("댓좋취 DB", data);
 
-      dispatch(getDetailDB(commentId));
+      dispatch(getFeedDB());
+      setCommentLike(false);
+      dispatch(getDetailDB(feed_Id));
     } catch (err) {
       console.log(err);
-      window.alert("댓글 삭제 실패, 다시 시도해 주세요.");
+      window.alert("댓글 좋아요 취소 실패!");
     }
   };
 };
