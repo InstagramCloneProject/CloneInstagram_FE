@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { AiFillFacebook } from "react-icons/ai";
 import { actionCreators } from "../redux/modules/user";
+import { history } from "../redux/configureStore";
 
 // import validator
 import { isLength, isAlphanumeric } from "validator";
@@ -186,6 +187,9 @@ function Signup() {
                   color: "#0095f6",
                   fontWeight: "bold",
                   fontSize: "15px",
+                }}
+                onClick={() => {
+                  history.push("/");
                 }}
               >
                 로그인

@@ -52,7 +52,7 @@ const Header = (props) => {
           <Logo
             src={logoIcon}
             onClick={() => {
-              history.push("/");
+              history.push("/main");
             }}
           ></Logo>
           <Grid margin="0px 200px" width="26%" height="70%">
@@ -67,7 +67,7 @@ const Header = (props) => {
             <Btn
               src={homeIcon}
               onClick={() => {
-                history.push("/");
+                history.push("/main");
               }}
             />
             <Btn

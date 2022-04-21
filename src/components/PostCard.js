@@ -15,6 +15,7 @@ import emojiIcon from "../assets/icons/emoji.png";
 import CommentWrite from "./CommentWrite";
 
 const PostCard = (props) => {
+  const __userId = props.user.id;
   const [is_like, setIsLike] = React.useState(false);
   const [comment_like, setCommentLike] = React.useState(false);
   const comment_list = props.comments;
@@ -63,7 +64,13 @@ const PostCard = (props) => {
               size="40"
               src={props.user.userInfos[0].profileImg}
             />
-            <Text margin="0px 10px" bold>
+            <Text
+              margin="0px 10px"
+              bold
+              _onClick={() => {
+                history.push(`/profile/${__userId}`);
+              }}
+            >
               {props.user.userId}
             </Text>
           </Grid>
@@ -132,7 +139,14 @@ const PostCard = (props) => {
       {/* 본문 */}
       <Grid display="flex" padding="0 5px 0 18px">
         <Grid is_flex>
-          <Text bold textAlign="left" margin="10px 0px">
+          <Text
+            bold
+            textAlign="left"
+            margin="10px 0px"
+            _onClick={() => {
+              history.push(`/profile/${__userId}`);
+            }}
+          >
             {props.user.userId}
           </Text>
           <Ellipsis>
